@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QAToolKit.Engine.Database", "src\QAToolKit.Engine.Database\QAToolKit.Engine.Database.csproj", "{120C5172-DDCA-442C-BFAB-2101519F6F2D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QAToolKit.Engine.Database.Test", "src\QAToolKit.Engine.Database.Test\QAToolKit.Engine.Database.Test.csproj", "{3416C1B7-25A5-438F-8D6D-9137E9925E7E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{120C5172-DDCA-442C-BFAB-2101519F6F2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{120C5172-DDCA-442C-BFAB-2101519F6F2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{120C5172-DDCA-442C-BFAB-2101519F6F2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{120C5172-DDCA-442C-BFAB-2101519F6F2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3416C1B7-25A5-438F-8D6D-9137E9925E7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3416C1B7-25A5-438F-8D6D-9137E9925E7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3416C1B7-25A5-438F-8D6D-9137E9925E7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3416C1B7-25A5-438F-8D6D-9137E9925E7E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {06B4F782-3069-4049-933D-D3E84B07D69F}
+	EndGlobalSection
+EndGlobal

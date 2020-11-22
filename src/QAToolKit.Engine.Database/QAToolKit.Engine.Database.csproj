@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.1;net5.0</TargetFrameworks>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<LangVersion>latest</LangVersion>
+		<ProjectGuid>665548a2-15c9-4e5b-b658-24a0020efc3a</ProjectGuid>
+
+		<!-- NuGet Metadata -->
+		<IsPackable>true</IsPackable>
+		<PackageVersion>$(Version)</PackageVersion>
+		<PackageId>QAToolKit.Engine.Database</PackageId>
+		<Authors>Miha Jakovac</Authors>
+		<Description>
+			QAToolKit.Engine.Database library.
+		</Description>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageLicenseFile>LICENSE</PackageLicenseFile>
+		<PackageProjectUrl>https://github.com/qatoolkit/qatoolkit-engine-database-net</PackageProjectUrl>
+		<PackageIcon>qatoolkit-64x64.png</PackageIcon>
+		<RepositoryUrl>https://github.com/qatoolkit/qatoolkit-engine-database-net</RepositoryUrl>
+		<PackageTags>qatoolkit-engine-database-net;.net;c#;f#;dotnet;netstandard;net5</PackageTags>
+		<Configurations>Debug;Release</Configurations>
+	</PropertyGroup>
+	
+	<PropertyGroup>
+		<DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\qatoolkit-64x64.png" Pack="true" PackagePath="\" />
+		<None Include="..\..\LICENSE" Pack="true" PackagePath="" />
+		<None Include="..\..\README.md" Pack="false" PackagePath="" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Dapper" Version="2.0.78" />
+	  <PackageReference Include="MySql.Data" Version="8.0.22" />
+	  <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+	  <PackageReference Include="Npgsql" Version="5.0.0" />
+	  <PackageReference Include="QAToolKit.Core" Version="0.3.2" />
+	  <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+	</ItemGroup>
+</Project>
