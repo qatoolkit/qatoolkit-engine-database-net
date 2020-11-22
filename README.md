@@ -4,6 +4,8 @@
 [![Sonarcloud Quality gate](https://github.com/qatoolkit/qatoolkit-engine-database-net/workflows/Sonarqube%20Analyze/badge.svg)](https://sonarcloud.io/dashboard?id=qatoolkit_qatoolkit-engine-database-net)
 [![NuGet package](https://img.shields.io/nuget/v/QAToolKit.Engine.DataBase?label=QAToolKit.Engine.Database)](https://www.nuget.org/packages/QAToolKit.Engine.Database/)
 
+**Not ready for release.**
+
 ## License
 
 MIT License
