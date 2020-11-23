@@ -1,103 +1,49 @@
-﻿using QAToolKit.Engine.Database.Interfaces;
-using QAToolKit.Engine.Database.Models;
+﻿using QAToolKit.Engine.Database.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace QAToolKit.Engine.Database.Generators
 {
     /// <summary>
     /// MySQL database test generator
     /// </summary>
-    public class MySqlTestGenerator : IDatabaseTestGenerator<DatabaseScript>
+    public class MySqlTestGenerator : RelationalDatabaseTestGenerator
     {
-        private readonly DatabaseTestGeneratorOptions _databaseTestOptions;
-        /// <summary>
-        /// Database kind/type
-        /// </summary>
-        public DatabaseKind DatabaseKind => DatabaseKind.MySQL;
-
         /// <summary>
         /// Create new instance of MySQL script generator
         /// </summary>
-        /// <param name="options"></param>
-        public MySqlTestGenerator(Action<DatabaseTestGeneratorOptions> options = null)
+        /// <param name="options"></param>        
+        public MySqlTestGenerator(Action<DatabaseTestGeneratorOptions> options = null) :
+            base(DatabaseKind.MySQL, options)
+        { }
+
+        /// <summary>
+        /// Get MySQl script for table exists abstract method
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        protected override string GetTableExistScript(string table)
         {
-            _databaseTestOptions = new DatabaseTestGeneratorOptions();
-            options?.Invoke(_databaseTestOptions);
+            return $@"SELECT EXISTS(SELECT * FROM information_schema.tables WHERE table_name = '{table}');";
         }
 
         /// <summary>
-        /// Generate MySQL database test scripts
+        /// Get MySQL script for view exists abstract method
         /// </summary>
+        /// <param name="view"></param>
         /// <returns></returns>
-        public Task<IEnumerable<DatabaseScript>> Generate()
+        protected override string GetViewExistScript(string view)
         {
-            if(_databaseTestOptions == null)
-            {
-                throw new ArgumentNullException($"DatabaseTestOptions is null.");
-            }
-
-            var results = new List<DatabaseScript>();
-
-            results.AddRange(GenerateObjectExistScripts());
-
-            return Task.FromResult(results.AsEnumerable());
+            return $@"SELECT EXISTS(SELECT * FROM information_schema.views WHERE table_name = '{view}');";
         }
 
-        private IEnumerable<DatabaseScript> GenerateObjectExistScripts()
+        /// <summary>
+        /// Get MySQL script for stored procedure exists abstract method
+        /// </summary>
+        /// <param name="storedProcedure"></param>
+        /// <returns></returns>
+        protected override string GetStoredProcedureExistScript(string storedProcedure)
         {
-            if (_databaseTestOptions.DatabaseObjectsExistRules == null)
-            {
-                throw new ArgumentNullException($"{nameof(_databaseTestOptions.DatabaseObjectsExistRules)} is null.");
-            }
-
-            var results = new List<DatabaseScript>();
-
-            _databaseTestOptions.DatabaseObjectsExistRules.TryGetValue(DatabaseObjectType.Table, out var tableValues);
-
-            if (tableValues != null)
-            {
-                foreach (var table in tableValues)
-                {
-                    results.Add(new DatabaseScript(
-                        table,
-                        $@"SELECT EXISTS(SELECT * FROM information_schema.tables WHERE table_name = '{table}');",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind));
-                }
-            }
-
-            _databaseTestOptions.DatabaseObjectsExistRules.TryGetValue(DatabaseObjectType.View, out var viewValues);
-
-            if (viewValues != null)
-            {
-                foreach (var view in viewValues)
-                {
-                    results.Add(new DatabaseScript(
-                        view,
-                        $@"SELECT EXISTS(SELECT * FROM information_schema.views WHERE table_name = '{view}');",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind));
-                }
-            }
-
-            _databaseTestOptions.DatabaseObjectsExistRules.TryGetValue(DatabaseObjectType.StoredProcedure, out var storedProcedureValues);
-
-            if (storedProcedureValues != null)
-            {
-                foreach (var storedProcedure in storedProcedureValues)
-                {
-                    results.Add(new DatabaseScript(
-                        storedProcedure,
-                        $@"SELECT EXISTS(SELECT * FROM information_schema.routines WHERE routine_name = '{storedProcedure}');",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind));
-                }
-            }
-
-            return results;
+            return $@"SELECT EXISTS(SELECT * FROM information_schema.routines WHERE routine_name = '{storedProcedure}');";
         }
     }
 }
