@@ -15,7 +15,6 @@ namespace QAToolKit.Engine.Database.Test
         {
             var generator = new SqlServerTestGenerator(options =>
             {
-                options.UseDatabase(DatabaseKind.SQLServer);
                 options.AddDatabaseObjectExitsRule(new string[] { "mytable" }, DatabaseObjectType.Table);
             });
 
@@ -37,7 +36,6 @@ namespace QAToolKit.Engine.Database.Test
         {
             var generator = new SqlServerTestGenerator(options =>
             {
-                options.UseDatabase(DatabaseKind.SQLServer);
                 options.AddDatabaseObjectExitsRule(new string[] { "myview" }, DatabaseObjectType.View);
             });
 
@@ -59,7 +57,6 @@ namespace QAToolKit.Engine.Database.Test
         {
             var generator = new SqlServerTestGenerator(options =>
             {
-                options.UseDatabase(DatabaseKind.SQLServer);
                 options.AddDatabaseObjectExitsRule(new string[] { "mystoredprocedure" }, DatabaseObjectType.StoredProcedure);
             });
 
@@ -81,7 +78,6 @@ namespace QAToolKit.Engine.Database.Test
         {
             var generator = new SqlServerTestGenerator(options =>
             {
-                options.UseDatabase(DatabaseKind.SQLServer);
                 options.AddDatabaseObjectExitsRule(new string[] { "table1", "table2" }, DatabaseObjectType.Table);
             });
 
@@ -108,7 +104,6 @@ namespace QAToolKit.Engine.Database.Test
         {
             var generator = new SqlServerTestGenerator(options =>
             {
-                options.UseDatabase(DatabaseKind.SQLServer);
                 options.AddDatabaseObjectExitsRule(new string[] { "view1", "view2" }, DatabaseObjectType.View);
             });
 
@@ -135,7 +130,6 @@ namespace QAToolKit.Engine.Database.Test
         {
             var generator = new SqlServerTestGenerator(options =>
             {
-                options.UseDatabase(DatabaseKind.SQLServer);
                 options.AddDatabaseObjectExitsRule(new string[] { "sp1", "sp2" }, DatabaseObjectType.StoredProcedure);
             });
 

@@ -8,10 +8,6 @@ namespace QAToolKit.Engine.Database
     /// </summary>
     public class DatabaseTestGeneratorOptions
     {
-        /// <summary>
-        /// Database kind/type
-        /// </summary>
-        public DatabaseKind DatabaseKind { get; private set; } = DatabaseKind.Undefined;
         internal Dictionary<DatabaseObjectType, string[]> DatabaseObjectsExistRules { get; private set; }
 
         /// <summary>
@@ -28,18 +24,6 @@ namespace QAToolKit.Engine.Database
             }
 
             DatabaseObjectsExistRules.Add(databaseObjectType, objects);
-
-            return this;
-        }
-
-        /// <summary>
-        /// Use database type
-        /// </summary>
-        /// <param name="databaseKind"></param>
-        /// <returns></returns>
-        public DatabaseTestGeneratorOptions UseDatabase(DatabaseKind databaseKind)
-        {
-            DatabaseKind = databaseKind;
 
             return this;
         }
