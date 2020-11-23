@@ -45,5 +45,25 @@ namespace QAToolKit.Engine.Database.Generators
         {
             return $@"IF EXISTS(SELECT 1 FROM sys.procedures WHERE Name = '{storedProcedure}') BEGIN Select 1 END ELSE BEGIN Select 0 END";
         }
+
+        /// <summary>
+        /// Get SQLServer script to check if record exist
+        /// </summary>
+        /// <param name="recordExist"></param>
+        /// <returns></returns>
+        protected override string GetRecordExistScript(DatabaseRule recordExist)
+        {
+            return $@"IF EXISTS(SELECT 1 FROM {recordExist.TableName} WHERE {recordExist.PredicateValue}) BEGIN Select 1 END ELSE BEGIN Select 0 END";
+        }
+
+        /// <summary>
+        /// Get SQLServer script to count the records in a table
+        /// </summary>
+        /// <param name="recordCount"></param>
+        /// <returns></returns>
+        protected override string GetRecordCountScript(DatabaseRule recordCount)
+        {
+            return $@"IF EXISTS(SELECT 1 FROM {recordCount.TableName} WHERE (SELECT count(*) FROM {recordCount.TableName}){recordCount.PredicateValue}) BEGIN Select 1 END ELSE BEGIN Select 0 END";
+        }
     }
 }

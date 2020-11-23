@@ -45,5 +45,25 @@ namespace QAToolKit.Engine.Database.Generators
         {
             return $@"SELECT EXISTS(SELECT * FROM information_schema.routines WHERE routine_name = '{storedProcedure}');";
         }
+
+        /// <summary>
+        /// Get MySQL script to check if record exist
+        /// </summary>
+        /// <param name="recordExist"></param>
+        /// <returns></returns>
+        protected override string GetRecordExistScript(DatabaseRule recordExist)
+        {
+            return $@"SELECT EXISTS (SELECT 1 FROM {recordExist.TableName} WHERE {recordExist.PredicateValue});";
+        }
+
+        /// <summary>
+        /// Get MySQL script to count the records in a table
+        /// </summary>
+        /// <param name="recordCount"></param>
+        /// <returns></returns>
+        protected override string GetRecordCountScript(DatabaseRule recordCount)
+        {
+            return $@"SELECT EXISTS (SELECT 1 FROM {recordCount.TableName} WHERE (SELECT count(*) FROM {recordCount.TableName}){recordCount.PredicateValue});";
+        }
     }
 }

@@ -41,28 +41,84 @@ namespace QAToolKit.Engine.Database.Generators
         {
             if (_databaseTestOptions == null)
             {
-                throw new ArgumentNullException($"DatabaseTestOptions is null.");
+                throw new ArgumentNullException($"{nameof(_databaseTestOptions)} is null.");
             }
 
             var results = new List<DatabaseScript>();
 
             results.AddRange(GenerateObjectExistScripts());
+            results.AddRange(GenerateCountRecordsScripts());
+            results.AddRange(GenerateRecordsExistScripts());
 
             return Task.FromResult(results.AsEnumerable());
         }
 
-        private IEnumerable<DatabaseScript> GenerateObjectExistScripts()
+        private IEnumerable<DatabaseScript> GenerateCountRecordsScripts()
         {
-            if (_databaseTestOptions.DatabaseObjectsExistRules == null)
-            {
-                throw new ArgumentNullException($"{nameof(_databaseTestOptions.DatabaseObjectsExistRules)} is null.");
-            }
-
             var results = new List<DatabaseScript>();
 
-            results.AddRange(GetTableExistScripts());
-            results.AddRange(GetViewExistScripts());
-            results.AddRange(GetStoredProcedureExistScripts());
+            if (_databaseTestOptions.DatabaseRecordsCountRules != null)
+            {
+                results.AddRange(GetRecordCountScripts());
+            }
+
+            return results;
+        }
+
+        private IEnumerable<DatabaseScript> GetRecordCountScripts()
+        {
+            var results = new List<DatabaseScript>();
+
+            foreach (var record in _databaseTestOptions.DatabaseRecordsCountRules)
+            {
+                results.Add(new DatabaseScript(
+                    record.TableName,
+                    GetRecordCountScript(record),
+                    DatabaseTestType.RecordCount,
+                    DatabaseKind));
+            }
+
+            return results;
+        }
+
+        private IEnumerable<DatabaseScript> GenerateRecordsExistScripts()
+        {
+            var results = new List<DatabaseScript>();
+
+            if (_databaseTestOptions.DatabaseRecordsExitsRules != null)
+            {
+                results.AddRange(GetRecordsExistScripts());
+            }
+
+            return results;
+        }
+
+        private IEnumerable<DatabaseScript> GetRecordsExistScripts()
+        {
+            var results = new List<DatabaseScript>();
+
+            foreach (var record in _databaseTestOptions.DatabaseRecordsExitsRules)
+            {
+                results.Add(new DatabaseScript(
+                    record.TableName,
+                    GetRecordExistScript(record),
+                    DatabaseTestType.RecordExist,
+                    DatabaseKind));
+            }
+
+            return results;
+        }
+
+        private IEnumerable<DatabaseScript> GenerateObjectExistScripts()
+        {
+            var results = new List<DatabaseScript>();
+
+            if (_databaseTestOptions.DatabaseObjectsExistRules != null)
+            {
+                results.AddRange(GetTableExistScripts());
+                results.AddRange(GetViewExistScripts());
+                results.AddRange(GetStoredProcedureExistScripts());
+            }
 
             return results;
         }
@@ -150,5 +206,19 @@ namespace QAToolKit.Engine.Database.Generators
         /// <param name="storedProcedure"></param>
         /// <returns></returns>
         protected abstract string GetStoredProcedureExistScript(string storedProcedure);
+
+        /// <summary>
+        /// Get script to check if record exist
+        /// </summary>
+        /// <param name="recordExist"></param>
+        /// <returns></returns>
+        protected abstract string GetRecordExistScript(DatabaseRule recordExist);
+
+        /// <summary>
+        /// Get script to count the records in a table
+        /// </summary>
+        /// <param name="recordCount"></param>
+        /// <returns></returns>
+        protected abstract string GetRecordCountScript(DatabaseRule recordCount);
     }
 }
