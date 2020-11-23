@@ -1,5 +1,4 @@
-﻿using QAToolKit.Engine.Database.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace QAToolKit.Engine.Database.Interfaces
@@ -9,10 +8,6 @@ namespace QAToolKit.Engine.Database.Interfaces
     /// </summary>
     public interface IDatabaseTestGenerator<T>
     {
-        /// <summary>
-        /// Database type
-        /// </summary>
-        public DatabaseKind DatabaseKind { get; }
         /// <summary>
         /// Generate a script
         /// </summary>

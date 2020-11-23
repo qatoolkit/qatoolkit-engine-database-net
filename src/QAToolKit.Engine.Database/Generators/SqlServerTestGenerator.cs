@@ -1,103 +1,69 @@
-﻿using QAToolKit.Engine.Database.Interfaces;
-using QAToolKit.Engine.Database.Models;
+﻿using QAToolKit.Engine.Database.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace QAToolKit.Engine.Database.Generators
 {
     /// <summary>
     /// SqlServer database test generator
     /// </summary>
-    public class SqlServerTestGenerator : IDatabaseTestGenerator<DatabaseScript>
+    public class SqlServerTestGenerator : RelationalDatabaseTestGenerator
     {
-        private readonly DatabaseTestGeneratorOptions _databaseTestOptions;
-        /// <summary>
-        /// Database kind/type
-        /// </summary>
-        public DatabaseKind DatabaseKind => DatabaseKind.SQLServer;
-
         /// <summary>
         /// Create new instance of SqlServer script generator
         /// </summary>
         /// <param name="options"></param>
-        public SqlServerTestGenerator(Action<DatabaseTestGeneratorOptions> options = null)
+        public SqlServerTestGenerator(Action<DatabaseTestGeneratorOptions> options = null) :
+            base(DatabaseKind.SQLServer, options)
+        { }
+
+        /// <summary>
+        /// Get SQL server script for table exists abstract method
+        /// </summary>
+        /// <param name="table"></param>
+        /// <returns></returns>
+        protected override string GetTableExistScript(string table)
         {
-            _databaseTestOptions = new DatabaseTestGeneratorOptions();
-            options?.Invoke(_databaseTestOptions);
+            return $@"IF EXISTS(SELECT 1 FROM sys.tables WHERE Name = '{table}') BEGIN Select 1 END ELSE BEGIN Select 0 END";
         }
 
         /// <summary>
-        /// Generate SqlServer database test scripts
+        /// Get SQLServer script for view exists abstract method
         /// </summary>
+        /// <param name="view"></param>
         /// <returns></returns>
-        public Task<IEnumerable<DatabaseScript>> Generate()
+        protected override string GetViewExistScript(string view)
         {
-            if (_databaseTestOptions == null)
-            {
-                throw new ArgumentNullException($"DatabaseTestOptions is null.");
-            }
-
-            var results = new List<DatabaseScript>();
-
-            results.AddRange(GenerateObjectExistScripts());
-
-            return Task.FromResult(results.AsEnumerable());
+            return $@"IF EXISTS(SELECT 1 FROM sys.views WHERE Name = '{view}') BEGIN Select 1 END ELSE BEGIN Select 0 END";
         }
 
-        private IEnumerable<DatabaseScript> GenerateObjectExistScripts()
+        /// <summary>
+        /// Get SQLServer script for stored procedure exists abstract method
+        /// </summary>
+        /// <param name="storedProcedure"></param>
+        /// <returns></returns>
+        protected override string GetStoredProcedureExistScript(string storedProcedure)
         {
-            if (_databaseTestOptions.DatabaseObjectsExistRules == null)
-            {
-                throw new ArgumentNullException($"{nameof(_databaseTestOptions.DatabaseObjectsExistRules)} is null.");
-            }
+            return $@"IF EXISTS(SELECT 1 FROM sys.procedures WHERE Name = '{storedProcedure}') BEGIN Select 1 END ELSE BEGIN Select 0 END";
+        }
 
-            var results = new List<DatabaseScript>();
+        /// <summary>
+        /// Get SQLServer script to check if record exist
+        /// </summary>
+        /// <param name="recordExist"></param>
+        /// <returns></returns>
+        protected override string GetRecordExistScript(DatabaseRule recordExist)
+        {
+            return $@"IF EXISTS(SELECT 1 FROM {recordExist.TableName} WHERE {recordExist.PredicateValue}) BEGIN Select 1 END ELSE BEGIN Select 0 END";
+        }
 
-            _databaseTestOptions.DatabaseObjectsExistRules.TryGetValue(DatabaseObjectType.Table, out var tableValues);
-
-            if (tableValues != null)
-            {
-                foreach (var table in tableValues)
-                {
-                    results.Add(new DatabaseScript(
-                        table,
-                        $@"IF EXISTS(SELECT 1 FROM sys.tables WHERE Name = '{table}') BEGIN Select 1 END ELSE BEGIN Select 0 END",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind));
-                }
-            }
-
-            _databaseTestOptions.DatabaseObjectsExistRules.TryGetValue(DatabaseObjectType.View, out var viewValues);
-
-            if (viewValues != null)
-            {
-                foreach (var view in viewValues)
-                {
-                    results.Add(new DatabaseScript(
-                        view,
-                        $@"IF EXISTS(SELECT 1 FROM sys.views WHERE Name = '{view}') BEGIN Select 1 END ELSE BEGIN Select 0 END",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind));
-                }
-            }
-
-            _databaseTestOptions.DatabaseObjectsExistRules.TryGetValue(DatabaseObjectType.StoredProcedure, out var storedProcedureValues);
-
-            if (storedProcedureValues != null)
-            {
-                foreach (var storedProcedure in storedProcedureValues)
-                {
-                    results.Add(new DatabaseScript(
-                        storedProcedure,
-                        $@"IF EXISTS(SELECT 1 FROM sys.procedures WHERE Name = '{storedProcedure}') BEGIN Select 1 END ELSE BEGIN Select 0 END",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind));
-                }
-            }
-
-            return results;
+        /// <summary>
+        /// Get SQLServer script to count the records in a table
+        /// </summary>
+        /// <param name="recordCount"></param>
+        /// <returns></returns>
+        protected override string GetRecordCountScript(DatabaseRule recordCount)
+        {
+            return $@"IF EXISTS(SELECT 1 FROM {recordCount.TableName} WHERE (SELECT count(*) FROM {recordCount.TableName}){recordCount.PredicateValue}) BEGIN Select 1 END ELSE BEGIN Select 0 END";
         }
     }
 }

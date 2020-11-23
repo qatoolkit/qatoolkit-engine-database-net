@@ -1,7 +1,6 @@
 ﻿using ExpectedObjects;
 using QAToolKit.Engine.Database.Generators;
 using QAToolKit.Engine.Database.Models;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -15,7 +14,6 @@ namespace QAToolKit.Engine.Database.Test
         {
             var generator = new PostgresqlTestGenerator(options =>
             {
-                options.UseDatabase(DatabaseKind.PostgreSQL);
                 options.AddDatabaseObjectExitsRule(new string[] { "mytable" }, DatabaseObjectType.Table);
             });
 
@@ -37,7 +35,6 @@ namespace QAToolKit.Engine.Database.Test
         {
             var generator = new PostgresqlTestGenerator(options =>
             {
-                options.UseDatabase(DatabaseKind.PostgreSQL);
                 options.AddDatabaseObjectExitsRule(new string[] { "myview" }, DatabaseObjectType.View);
             });
 
@@ -59,7 +56,6 @@ namespace QAToolKit.Engine.Database.Test
         {
             var generator = new PostgresqlTestGenerator(options =>
             {
-                options.UseDatabase(DatabaseKind.PostgreSQL);
                 options.AddDatabaseObjectExitsRule(new string[] { "mystoredprocedure" }, DatabaseObjectType.StoredProcedure);
             });
 
@@ -81,7 +77,6 @@ namespace QAToolKit.Engine.Database.Test
         {
             var generator = new PostgresqlTestGenerator(options =>
             {
-                options.UseDatabase(DatabaseKind.PostgreSQL);
                 options.AddDatabaseObjectExitsRule(new string[] { "table1", "table2" }, DatabaseObjectType.Table);
             });
 
@@ -108,7 +103,6 @@ namespace QAToolKit.Engine.Database.Test
         {
             var generator = new PostgresqlTestGenerator(options =>
             {
-                options.UseDatabase(DatabaseKind.PostgreSQL);
                 options.AddDatabaseObjectExitsRule(new string[] { "view1", "view2" }, DatabaseObjectType.View);
             });
 
@@ -135,7 +129,6 @@ namespace QAToolKit.Engine.Database.Test
         {
             var generator = new PostgresqlTestGenerator(options =>
             {
-                options.UseDatabase(DatabaseKind.PostgreSQL);
                 options.AddDatabaseObjectExitsRule(new string[] { "sp1", "sp2" }, DatabaseObjectType.StoredProcedure);
             });
 
@@ -169,12 +162,61 @@ namespace QAToolKit.Engine.Database.Test
         }
 
         [Fact]
-        public async Task PostgresqlObjectExistScriptNullOptionsTest_Fails()
+        public async Task PostgresqlRecordExistScriptTest_Success()
         {
-            var generator = new PostgresqlTestGenerator();
+            var generator = new PostgresqlTestGenerator(options =>
+            {
+                options.AddDatabaseRecordExitsRule(
+                new List<DatabaseRule>()
+                {
+                    new DatabaseRule()
+                    {
+                        TableName = "mytable",
+                        PredicateValue = "= 'myname'"
+                    }
+                });
+            });
 
+            var results = new List<DatabaseScript>
+            {
+                new DatabaseScript(
+                        "mytable",
+                        $@"SELECT EXISTS (SELECT 1 FROM mytable WHERE = 'myname');",
+                        DatabaseTestType.RecordExist,
+                        DatabaseKind.PostgreSQL)
+            }.ToExpectedObject();
+
+            results.ShouldEqual(await generator.Generate());
             Assert.Equal(DatabaseKind.PostgreSQL, generator.DatabaseKind);
-            await Assert.ThrowsAsync<ArgumentNullException>(async () => await generator.Generate());
+        }
+
+        [Fact]
+        public async Task PostgresqlRecordCountScriptTest_Success()
+        {
+            var generator = new PostgresqlTestGenerator(options =>
+            {
+                options.AddDatabaseRecordsCountRule(
+                new List<DatabaseRule>()
+                {
+                    new DatabaseRule()
+                    {
+                        TableName = "mytable",
+                        PredicateValue = "=100"
+                    }
+                });
+            });
+
+            var results = new List<DatabaseScript>
+            {
+                new DatabaseScript(
+                        "mytable",
+                        $@"SELECT EXISTS (SELECT 1 FROM mytable WHERE (SELECT count(*) FROM mytable)=100);",
+                        DatabaseTestType.RecordCount,
+                        DatabaseKind.PostgreSQL)
+            }.ToExpectedObject();
+
+            results.ShouldEqual(await generator.Generate());
+            Assert.Equal(DatabaseKind.PostgreSQL, generator.DatabaseKind);
         }
     }
 }

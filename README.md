@@ -1,5 +1,5 @@
 # QAToolKit Engine Database library
-[![Build .NET Library](https://github.com/qatoolkit/qatoolkit-engine-database-net/workflows/.NET%20Core/badge.svg?branch=main)](https://github.com/qatoolkit/qatoolkit-engine-database-net/actions)
+[![Build .NET Library](https://github.com/qatoolkit/qatoolkit-engine-database-net/workflows/Build%20.NET%20Library/badge.svg)](https://github.com/qatoolkit/qatoolkit-engine-database-net/actions)
 [![CodeQL](https://github.com/qatoolkit/qatoolkit-engine-database-net/workflows/CodeQL%20Analyze/badge.svg)](https://github.com/qatoolkit/qatoolkit-engine-database-net/security/code-scanning)
 [![Sonarcloud Quality gate](https://github.com/qatoolkit/qatoolkit-engine-database-net/workflows/Sonarqube%20Analyze/badge.svg)](https://sonarcloud.io/dashboard?id=qatoolkit_qatoolkit-engine-database-net)
 [![NuGet package](https://img.shields.io/nuget/v/QAToolKit.Engine.DataBase?label=QAToolKit.Engine.Database)](https://www.nuget.org/packages/QAToolKit.Engine.Database/)
