@@ -1,10 +1,10 @@
 ﻿using Dapper;
-using QAToolKit.Engine.Database.Interfaces;
 using QAToolKit.Engine.Database.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using QAToolKit.Core.Interfaces;
 
 namespace QAToolKit.Engine.Database.Runners
 {
