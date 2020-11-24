@@ -172,7 +172,7 @@ namespace QAToolKit.Engine.Database.Test
                         new DatabaseRule()
                         {
                             TableName = "mytable",
-                            PredicateValue = "= 'myname'"
+                            PredicateValue = "name = 'myname'"
                         }
                     });
             });
@@ -181,7 +181,7 @@ namespace QAToolKit.Engine.Database.Test
             {
                 new DatabaseScript(
                         "mytable",
-                        $@"SELECT EXISTS (SELECT 1 FROM mytable WHERE = 'myname');",
+                        $@"SELECT EXISTS (SELECT 1 FROM mytable WHERE name = 'myname');",
                         DatabaseTestType.RecordExist,
                         DatabaseKind.MySQL)
             }.ToExpectedObject();
