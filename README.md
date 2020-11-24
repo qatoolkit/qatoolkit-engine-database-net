@@ -4,7 +4,74 @@
 [![Sonarcloud Quality gate](https://github.com/qatoolkit/qatoolkit-engine-database-net/workflows/Sonarqube%20Analyze/badge.svg)](https://sonarcloud.io/dashboard?id=qatoolkit_qatoolkit-engine-database-net)
 [![NuGet package](https://img.shields.io/nuget/v/QAToolKit.Engine.DataBase?label=QAToolKit.Engine.Database)](https://www.nuget.org/packages/QAToolKit.Engine.Database/)
 
-**Not ready for release.**
+## Description
+`QAToolKit.Engine.Database` is a .NET standard library, which can be used to do database fitness tests. For example, if you want to test that table is present in database, or certain number of records exist in specific table or if a record exists.
+
+`DatabaseTestType` enumeration currently described those three test types:
+- `ObjectExits`: Check if table, view or stored procedure exists.
+- `RecordCount`: Check if record count in specific table equals an expression.
+- `RecordExist`: Check if a record exists in specific table.
+
+Currently supports only relational databases: `SQLServer`, `MySQL` and `PostgreSQL`.
+
+## Sample
+
+```csharp
+var generator = new SqlServerTestGenerator(options =>
+{
+    options.AddDatabaseObjectExitsRule(new string[] { "mytable" }, DatabaseObjectType.Table);
+
+    options.AddDatabaseRecordExitsRule(
+    new List<DatabaseRule>()
+    {
+        new DatabaseRule()
+        {
+            TableName = "mytable",
+            PredicateValue = "name = 'myname'"
+        }
+    });
+
+    options.AddDatabaseRecordsCountRule(
+    new List<DatabaseRule>()
+    {
+        new DatabaseRule()
+        {
+            TableName = "mytable",
+            PredicateValue = "=100"
+        }
+    });
+});
+
+List<DatabaseScript> scripts = await generator.Generate();
+```
+The code above will generate a SQLServer `DatabaseScript` list, which will be used by runner to run the tests against database.
+
+Above example adds all three test types to the generator:
+- `AddDatabaseObjectExitsRule`: will check if a table `mytable` exists in the database.
+- `AddDatabaseRecordExitsRule`: will check if a record in table `mytable` with `name` equals `myname` exists.
+- `AddDatabaseRecordsCountRule`: will check if there is exactly 100 records in the `mytable` table.
+
+Alternatively if you want to use `MySQL` or `PostgreSQL` generators, you can use MySqlTestGenerator` or `PostgresqlTestGenerator` respectively.
+
+To run the tests, we create a `SqlServerTestRunner` runner:
+
+```csharp
+var runner = new SqlServerTestRunner(scripts, options =>
+{
+    options.AddSQLServerConnection("server=localhost;user=sa;password=Mihaj666.;Initial Catalog=");
+});
+
+List<DatabaseScriptResult> results = await runner.Run();
+```
+
+Alternatively if you want to use `MySQL` or `PostgreSQL` runners, you can use MySqlTestRunner` or `PostgresqlTestRunner` respectively.
+
+Please note that **your user must have correct database permissions**. I suggest a read-only permissions that can also access `sys` or `information_schema` schemas.
+
+## To-Do
+
+- Implement asserters for processing the `DatabaseScriptResult` list.
+- Add more test types if necessary.
 
 ## License
 
