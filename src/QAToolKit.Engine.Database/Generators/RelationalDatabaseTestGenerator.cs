@@ -1,4 +1,4 @@
-﻿using QAToolKit.Engine.Database.Interfaces;
+﻿using QAToolKit.Core.Interfaces;
 using QAToolKit.Engine.Database.Models;
 using System;
 using System.Collections.Generic;
