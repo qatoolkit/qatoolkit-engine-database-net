@@ -58,7 +58,7 @@ To run the tests, we create a `SqlServerTestRunner` runner:
 ```csharp
 var runner = new SqlServerTestRunner(scripts, options =>
 {
-    options.AddSQLServerConnection("server=localhost;user=sa;password=Mihaj666.;Initial Catalog=");
+    options.AddSQLServerConnection("server=localhost;user=sa;password=passw0rd;Initial Catalog=myDatabase");
 });
 
 List<DatabaseScriptResult> results = await runner.Run();
