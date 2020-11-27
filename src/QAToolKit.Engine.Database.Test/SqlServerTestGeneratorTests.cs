@@ -21,7 +21,7 @@ namespace QAToolKit.Engine.Database.Test
             {
                 new DatabaseScript(
                         "mytable",
-                        $@"IF EXISTS(SELECT 1 FROM sys.tables WHERE Name = 'mytable') BEGIN Select 1 END ELSE BEGIN Select 0 END",
+                        $@"IF EXISTS (SELECT * FROM [sys].[tables] WHERE [Name] = 'mytable') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.SQLServer)
             }.ToExpectedObject();
@@ -42,7 +42,7 @@ namespace QAToolKit.Engine.Database.Test
             {
                 new DatabaseScript(
                         "myview",
-                        $@"IF EXISTS(SELECT 1 FROM sys.views WHERE Name = 'myview') BEGIN Select 1 END ELSE BEGIN Select 0 END",
+                        $@"IF EXISTS (SELECT * FROM [sys].[views] WHERE [Name] = 'myview') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.SQLServer)
             }.ToExpectedObject();
@@ -63,7 +63,7 @@ namespace QAToolKit.Engine.Database.Test
             {
                 new DatabaseScript(
                         "mystoredprocedure",
-                        $@"IF EXISTS(SELECT 1 FROM sys.procedures WHERE Name = 'mystoredprocedure') BEGIN Select 1 END ELSE BEGIN Select 0 END",
+                        $@"IF EXISTS (SELECT * FROM [sys].[procedures] WHERE [Name] = 'mystoredprocedure') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.SQLServer)
             }.ToExpectedObject();
@@ -84,12 +84,12 @@ namespace QAToolKit.Engine.Database.Test
             {
                new DatabaseScript(
                         "table1",
-                        $@"IF EXISTS(SELECT 1 FROM sys.tables WHERE Name = 'table1') BEGIN Select 1 END ELSE BEGIN Select 0 END",
+                        $@"IF EXISTS (SELECT * FROM [sys].[tables] WHERE [Name] = 'table1') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.SQLServer),
                new DatabaseScript(
                         "table2",
-                        $@"IF EXISTS(SELECT 1 FROM sys.tables WHERE Name = 'table2') BEGIN Select 1 END ELSE BEGIN Select 0 END",
+                        $@"IF EXISTS (SELECT * FROM [sys].[tables] WHERE [Name] = 'table2') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.SQLServer)
             }.ToExpectedObject();
@@ -110,12 +110,12 @@ namespace QAToolKit.Engine.Database.Test
             {
                  new DatabaseScript(
                         "view1",
-                        $@"IF EXISTS(SELECT 1 FROM sys.views WHERE Name = 'view1') BEGIN Select 1 END ELSE BEGIN Select 0 END",
+                        $@"IF EXISTS (SELECT * FROM [sys].[views] WHERE [Name] = 'view1') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.SQLServer),
                  new DatabaseScript(
                         "view2",
-                        $@"IF EXISTS(SELECT 1 FROM sys.views WHERE Name = 'view2') BEGIN Select 1 END ELSE BEGIN Select 0 END",
+                        $@"IF EXISTS (SELECT * FROM [sys].[views] WHERE [Name] = 'view2') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.SQLServer)
             }.ToExpectedObject();
@@ -136,12 +136,12 @@ namespace QAToolKit.Engine.Database.Test
             {
                 new DatabaseScript(
                         "sp1",
-                        $@"IF EXISTS(SELECT 1 FROM sys.procedures WHERE Name = 'sp1') BEGIN Select 1 END ELSE BEGIN Select 0 END",
+                        $@"IF EXISTS (SELECT * FROM [sys].[procedures] WHERE [Name] = 'sp1') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.SQLServer),
                 new DatabaseScript(
                         "sp2",
-                        $@"IF EXISTS(SELECT 1 FROM sys.procedures WHERE Name = 'sp2') BEGIN Select 1 END ELSE BEGIN Select 0 END",
+                        $@"IF EXISTS (SELECT * FROM [sys].[procedures] WHERE [Name] = 'sp2') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.SQLServer)
             }.ToExpectedObject();
@@ -168,12 +168,14 @@ namespace QAToolKit.Engine.Database.Test
             var generator = new SqlServerTestGenerator(options =>
             {
                 options.AddDatabaseRecordExitsRule(
-                new List<DatabaseRule>()
+                new List<DatabaseRecordExistRule>()
                 {
-                    new DatabaseRule()
+                    new DatabaseRecordExistRule()
                     {
                         TableName = "mytable",
-                        PredicateValue = "name = 'myname'"
+                        ColumnName = "name",
+                        Operator = "=",
+                        Value = "myname"
                     }
                 });
             });
@@ -182,7 +184,7 @@ namespace QAToolKit.Engine.Database.Test
             {
                 new DatabaseScript(
                         "mytable",
-                        $@"IF EXISTS(SELECT 1 FROM mytable WHERE name = 'myname') BEGIN Select 1 END ELSE BEGIN Select 0 END",
+                        $@"IF EXISTS (SELECT * FROM [mytable] WHERE [name] = 'myname') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.RecordExist,
                         DatabaseKind.SQLServer)
             }.ToExpectedObject();
@@ -197,12 +199,13 @@ namespace QAToolKit.Engine.Database.Test
             var generator = new SqlServerTestGenerator(options =>
             {
                 options.AddDatabaseRecordsCountRule(
-                new List<DatabaseRule>()
+                new List<DatabaseRecordCountRule>()
                 {
-                    new DatabaseRule()
+                    new DatabaseRecordCountRule()
                     {
                         TableName = "mytable",
-                        PredicateValue = "=100"
+                        Operator = "=",
+                        Count = 100
                     }
                 });
             });
@@ -211,7 +214,7 @@ namespace QAToolKit.Engine.Database.Test
             {
                 new DatabaseScript(
                         "mytable",
-                        $@"IF EXISTS(SELECT 1 FROM mytable WHERE (SELECT count(*) FROM mytable)=100) BEGIN Select 1 END ELSE BEGIN Select 0 END",
+                        $@"IF EXISTS (SELECT * FROM [mytable] WHERE (SELECT COUNT(*) AS [count] FROM [mytable]) = 100) BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.RecordCount,
                         DatabaseKind.SQLServer)
             }.ToExpectedObject();

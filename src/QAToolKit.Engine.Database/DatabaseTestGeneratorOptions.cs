@@ -9,8 +9,8 @@ namespace QAToolKit.Engine.Database
     public class DatabaseTestGeneratorOptions
     {
         internal Dictionary<DatabaseObjectType, string[]> DatabaseObjectsExistRules { get; private set; }
-        internal List<DatabaseRule> DatabaseRecordsCountRules { get; private set; }
-        internal List<DatabaseRule> DatabaseRecordsExitsRules { get; private set; }
+        internal List<DatabaseRecordCountRule> DatabaseRecordsCountRules { get; private set; }
+        internal List<DatabaseRecordExistRule> DatabaseRecordsExitsRules { get; private set; }
 
         /// <summary>
         /// Add database object exist rules
@@ -35,11 +35,11 @@ namespace QAToolKit.Engine.Database
         /// </summary>
         /// <param name="objects"></param>
         /// <returns></returns>
-        public DatabaseTestGeneratorOptions AddDatabaseRecordsCountRule(List<DatabaseRule> objects)
+        public DatabaseTestGeneratorOptions AddDatabaseRecordsCountRule(List<DatabaseRecordCountRule> objects)
         {
             if (DatabaseRecordsCountRules == null)
             {
-                DatabaseRecordsCountRules = new List<DatabaseRule>();
+                DatabaseRecordsCountRules = new List<DatabaseRecordCountRule>();
             }
 
             DatabaseRecordsCountRules.AddRange(objects);
@@ -52,11 +52,11 @@ namespace QAToolKit.Engine.Database
         /// </summary>
         /// <param name="objects"></param>
         /// <returns></returns>
-        public DatabaseTestGeneratorOptions AddDatabaseRecordExitsRule(List<DatabaseRule> objects)
+        public DatabaseTestGeneratorOptions AddDatabaseRecordExitsRule(List<DatabaseRecordExistRule> objects)
         {
             if (DatabaseRecordsExitsRules == null)
             {
-                DatabaseRecordsExitsRules = new List<DatabaseRule>();
+                DatabaseRecordsExitsRules = new List<DatabaseRecordExistRule>();
             }
 
             DatabaseRecordsExitsRules.AddRange(objects);
