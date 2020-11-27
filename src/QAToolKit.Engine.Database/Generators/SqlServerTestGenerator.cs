@@ -1,4 +1,6 @@
 ﻿using QAToolKit.Engine.Database.Models;
+using SqlKata;
+using SqlKata.Compilers;
 using System;
 
 namespace QAToolKit.Engine.Database.Generators
@@ -8,13 +10,17 @@ namespace QAToolKit.Engine.Database.Generators
     /// </summary>
     public class SqlServerTestGenerator : RelationalDatabaseTestGenerator
     {
+        private readonly SqlServerCompiler sqlServerCompiler;
+
         /// <summary>
         /// Create new instance of SqlServer script generator
         /// </summary>
         /// <param name="options"></param>
         public SqlServerTestGenerator(Action<DatabaseTestGeneratorOptions> options = null) :
             base(DatabaseKind.SQLServer, options)
-        { }
+        {
+            sqlServerCompiler = new SqlServerCompiler();
+        }
 
         /// <summary>
         /// Get SQL server script for table exists abstract method
@@ -23,7 +29,9 @@ namespace QAToolKit.Engine.Database.Generators
         /// <returns></returns>
         protected override string GetTableExistScript(string table)
         {
-            return $@"IF EXISTS(SELECT 1 FROM sys.tables WHERE Name = '{table}') BEGIN Select 1 END ELSE BEGIN Select 0 END";
+            var query = new Query("sys.tables").Select("*").Where("Name", table);
+            var result = sqlServerCompiler.Compile(query);
+            return $"IF EXISTS ({result}) BEGIN Select 1 END ELSE BEGIN Select 0 END;";
         }
 
         /// <summary>
@@ -33,7 +41,9 @@ namespace QAToolKit.Engine.Database.Generators
         /// <returns></returns>
         protected override string GetViewExistScript(string view)
         {
-            return $@"IF EXISTS(SELECT 1 FROM sys.views WHERE Name = '{view}') BEGIN Select 1 END ELSE BEGIN Select 0 END";
+            var query = new Query("sys.views").Select("*").Where("Name", view);
+            var result = sqlServerCompiler.Compile(query);
+            return $"IF EXISTS ({result}) BEGIN Select 1 END ELSE BEGIN Select 0 END;";
         }
 
         /// <summary>
@@ -43,7 +53,9 @@ namespace QAToolKit.Engine.Database.Generators
         /// <returns></returns>
         protected override string GetStoredProcedureExistScript(string storedProcedure)
         {
-            return $@"IF EXISTS(SELECT 1 FROM sys.procedures WHERE Name = '{storedProcedure}') BEGIN Select 1 END ELSE BEGIN Select 0 END";
+            var query = new Query("sys.procedures").Select("*").Where("Name", storedProcedure);
+            var result = sqlServerCompiler.Compile(query);
+            return $"IF EXISTS ({result}) BEGIN Select 1 END ELSE BEGIN Select 0 END;";
         }
 
         /// <summary>
@@ -51,9 +63,17 @@ namespace QAToolKit.Engine.Database.Generators
         /// </summary>
         /// <param name="recordExist"></param>
         /// <returns></returns>
-        protected override string GetRecordExistScript(DatabaseRule recordExist)
+        protected override string GetRecordExistScript(DatabaseRecordExistRule recordExist)
         {
-            return $@"IF EXISTS(SELECT 1 FROM {recordExist.TableName} WHERE {recordExist.PredicateValue}) BEGIN Select 1 END ELSE BEGIN Select 0 END";
+            //return $@"IF EXISTS(SELECT 1 FROM {recordExist.TableName} WHERE {recordExist.PredicateValue}) BEGIN Select 1 END ELSE BEGIN Select 0 END";
+
+            var query = new Query(recordExist.TableName)
+                .Select("*")
+                .Where(recordExist.ColumnName, recordExist.Operator, recordExist.Value);
+
+            var result = sqlServerCompiler.Compile(query);
+
+            return $"IF EXISTS ({result}) BEGIN Select 1 END ELSE BEGIN Select 0 END;";
         }
 
         /// <summary>
@@ -61,9 +81,15 @@ namespace QAToolKit.Engine.Database.Generators
         /// </summary>
         /// <param name="recordCount"></param>
         /// <returns></returns>
-        protected override string GetRecordCountScript(DatabaseRule recordCount)
+        protected override string GetRecordCountScript(DatabaseRecordCountRule recordCount)
         {
-            return $@"IF EXISTS(SELECT 1 FROM {recordCount.TableName} WHERE (SELECT count(*) FROM {recordCount.TableName}){recordCount.PredicateValue}) BEGIN Select 1 END ELSE BEGIN Select 0 END";
+            var countQuery = new Query(recordCount.TableName).AsCount();
+
+            var query = new Query(recordCount.TableName).Select("*").WhereRaw($"({sqlServerCompiler.Compile(countQuery)}) {recordCount.Operator} {recordCount.Count}");
+
+            var result = sqlServerCompiler.Compile(query);
+
+            return $"IF EXISTS ({result}) BEGIN Select 1 END ELSE BEGIN Select 0 END;";
         }
     }
 }

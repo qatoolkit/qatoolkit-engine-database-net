@@ -21,7 +21,7 @@ namespace QAToolKit.Engine.Database.Test
             {
                 new DatabaseScript(
                         "mytable",
-                        $@"SELECT EXISTS (SELECT * FROM information_schema.tables WHERE table_name = 'mytable');",
+                        $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""tables"" WHERE ""table_name"" = 'mytable');",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.PostgreSQL)
             }.ToExpectedObject();
@@ -42,7 +42,7 @@ namespace QAToolKit.Engine.Database.Test
             {
                 new DatabaseScript(
                         "myview",
-                        $@"SELECT EXISTS (SELECT * FROM information_schema.views WHERE table_name = 'myview');",
+                        $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""views"" WHERE ""table_name"" = 'myview');",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.PostgreSQL)
             }.ToExpectedObject();
@@ -63,7 +63,7 @@ namespace QAToolKit.Engine.Database.Test
             {
                 new DatabaseScript(
                         "mystoredprocedure",
-                        $@"SELECT EXISTS (SELECT * FROM information_schema.routines WHERE routine_name = 'mystoredprocedure');",
+                        $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""routines"" WHERE ""routine_name"" = 'mystoredprocedure');",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.PostgreSQL)
             }.ToExpectedObject();
@@ -84,12 +84,12 @@ namespace QAToolKit.Engine.Database.Test
             {
                new DatabaseScript(
                         "table1",
-                        $@"SELECT EXISTS (SELECT * FROM information_schema.tables WHERE table_name = 'table1');",
+                        $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""tables"" WHERE ""table_name"" = 'table1');",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.PostgreSQL),
                new DatabaseScript(
                         "table2",
-                        $@"SELECT EXISTS (SELECT * FROM information_schema.tables WHERE table_name = 'table2');",
+                        $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""tables"" WHERE ""table_name"" = 'table2');",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.PostgreSQL)
             }.ToExpectedObject();
@@ -110,12 +110,12 @@ namespace QAToolKit.Engine.Database.Test
             {
                  new DatabaseScript(
                         "view1",
-                        $@"SELECT EXISTS (SELECT * FROM information_schema.views WHERE table_name = 'view1');",
+                        $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""views"" WHERE ""table_name"" = 'view1');",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.PostgreSQL),
                  new DatabaseScript(
                         "view2",
-                        $@"SELECT EXISTS (SELECT * FROM information_schema.views WHERE table_name = 'view2');",
+                        $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""views"" WHERE ""table_name"" = 'view2');",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.PostgreSQL)
             }.ToExpectedObject();
@@ -136,12 +136,12 @@ namespace QAToolKit.Engine.Database.Test
             {
                 new DatabaseScript(
                         "sp1",
-                        $@"SELECT EXISTS (SELECT * FROM information_schema.routines WHERE routine_name = 'sp1');",
+                        $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""routines"" WHERE ""routine_name"" = 'sp1');",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.PostgreSQL),
                 new DatabaseScript(
                         "sp2",
-                        $@"SELECT EXISTS (SELECT * FROM information_schema.routines WHERE routine_name = 'sp2');",
+                        $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""routines"" WHERE ""routine_name"" = 'sp2');",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.PostgreSQL)
             }.ToExpectedObject();
@@ -167,12 +167,14 @@ namespace QAToolKit.Engine.Database.Test
             var generator = new PostgresqlTestGenerator(options =>
             {
                 options.AddDatabaseRecordExitsRule(
-                new List<DatabaseRule>()
+                new List<DatabaseRecordExistRule>()
                 {
-                    new DatabaseRule()
+                    new DatabaseRecordExistRule()
                     {
                         TableName = "mytable",
-                        PredicateValue = "name = 'myname'"
+                        ColumnName = "name",
+                        Operator = "=",
+                        Value = "myname"
                     }
                 });
             });
@@ -181,7 +183,7 @@ namespace QAToolKit.Engine.Database.Test
             {
                 new DatabaseScript(
                         "mytable",
-                        $@"SELECT EXISTS (SELECT 1 FROM mytable WHERE name = 'myname');",
+                        $@"SELECT EXISTS(SELECT * FROM ""mytable"" WHERE ""name"" = 'myname');",
                         DatabaseTestType.RecordExist,
                         DatabaseKind.PostgreSQL)
             }.ToExpectedObject();
@@ -196,12 +198,13 @@ namespace QAToolKit.Engine.Database.Test
             var generator = new PostgresqlTestGenerator(options =>
             {
                 options.AddDatabaseRecordsCountRule(
-                new List<DatabaseRule>()
+                new List<DatabaseRecordCountRule>()
                 {
-                    new DatabaseRule()
+                    new DatabaseRecordCountRule()
                     {
                         TableName = "mytable",
-                        PredicateValue = "=100"
+                        Operator = "=",
+                        Count = 100
                     }
                 });
             });
@@ -210,7 +213,7 @@ namespace QAToolKit.Engine.Database.Test
             {
                 new DatabaseScript(
                         "mytable",
-                        $@"SELECT EXISTS (SELECT 1 FROM mytable WHERE (SELECT count(*) FROM mytable)=100);",
+                        $@"SELECT EXISTS (SELECT * FROM ""mytable"" WHERE (SELECT COUNT(*) AS ""count"" FROM ""mytable"") = 100);",
                         DatabaseTestType.RecordCount,
                         DatabaseKind.PostgreSQL)
             }.ToExpectedObject();

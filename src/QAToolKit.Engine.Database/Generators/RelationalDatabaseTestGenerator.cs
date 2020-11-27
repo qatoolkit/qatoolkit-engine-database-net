@@ -212,13 +212,13 @@ namespace QAToolKit.Engine.Database.Generators
         /// </summary>
         /// <param name="recordExist"></param>
         /// <returns></returns>
-        protected abstract string GetRecordExistScript(DatabaseRule recordExist);
+        protected abstract string GetRecordExistScript(DatabaseRecordExistRule recordExist);
 
         /// <summary>
         /// Get script to count the records in a table
         /// </summary>
         /// <param name="recordCount"></param>
         /// <returns></returns>
-        protected abstract string GetRecordCountScript(DatabaseRule recordCount);
+        protected abstract string GetRecordCountScript(DatabaseRecordCountRule recordCount);
     }
 }

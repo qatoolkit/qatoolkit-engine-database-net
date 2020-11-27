@@ -21,24 +21,25 @@ var generator = new SqlServerTestGenerator(options =>
 {
     options.AddDatabaseObjectExitsRule(new string[] { "mytable" }, DatabaseObjectType.Table);
 
-    options.AddDatabaseRecordExitsRule(
-    new List<DatabaseRule>()
+    options.AddDatabaseRecordExitsRule(new List<DatabaseRecordExistRule>()
     {
-        new DatabaseRule()
+        new DatabaseRecordExistRule()
         {
             TableName = "mytable",
-            PredicateValue = "name = 'myname'"
+            ColumnName = "name",
+            Operator = "=",
+            Value = "myname"
         }
     });
 
-    options.AddDatabaseRecordsCountRule(
-    new List<DatabaseRule>()
+    options.AddDatabaseRecordsCountRule(new List<DatabaseRecordCountRule>() 
     {
-        new DatabaseRule()
+        new DatabaseRecordCountRule() 
         {
-            TableName = "mytable",
-            PredicateValue = "=100"
-        }
+            TableName = "mytable", 
+            Count = 100,
+            Operator = "=" 
+        } 
     });
 });
 
@@ -58,7 +59,7 @@ To run the tests, we create a `SqlServerTestRunner` runner:
 ```csharp
 var runner = new SqlServerTestRunner(scripts, options =>
 {
-    options.AddSQLServerConnection("server=localhost;user=sa;password=passw0rd;Initial Catalog=myDatabase");
+    options.AddSQLServerConnection("server=localhost;user=user;password=mypassword;Initial Catalog=myDatabase");
 });
 
 List<DatabaseScriptResult> results = await runner.Run();
