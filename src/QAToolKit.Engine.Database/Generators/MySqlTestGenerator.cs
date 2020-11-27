@@ -1,5 +1,13 @@
 ﻿using QAToolKit.Engine.Database.Models;
 using System;
+using SqlKata;
+using SqlKata.Compilers;
+using SqlKata.Extensions;
+using MySql.Data.MySqlClient;
+using System.Text.RegularExpressions;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
 
 namespace QAToolKit.Engine.Database.Generators
 {
@@ -8,13 +16,17 @@ namespace QAToolKit.Engine.Database.Generators
     /// </summary>
     public class MySqlTestGenerator : RelationalDatabaseTestGenerator
     {
+        private readonly MySqlCompiler mySqlCompiler;
+
         /// <summary>
         /// Create new instance of MySQL script generator
         /// </summary>
         /// <param name="options"></param>        
         public MySqlTestGenerator(Action<DatabaseTestGeneratorOptions> options = null) :
             base(DatabaseKind.MySQL, options)
-        { }
+        {
+            mySqlCompiler = new MySqlCompiler();
+        }
 
         /// <summary>
         /// Get MySQl script for table exists abstract method
@@ -23,7 +35,10 @@ namespace QAToolKit.Engine.Database.Generators
         /// <returns></returns>
         protected override string GetTableExistScript(string table)
         {
-            return $@"SELECT EXISTS(SELECT * FROM information_schema.tables WHERE table_name = '{table}');";
+            var query = new Query("information_schema.tables").Select("*").Where("table_name", table);
+            var result = mySqlCompiler.Compile(query);
+
+            return $@"SELECT EXISTS({result});";
         }
 
         /// <summary>
@@ -33,7 +48,10 @@ namespace QAToolKit.Engine.Database.Generators
         /// <returns></returns>
         protected override string GetViewExistScript(string view)
         {
-            return $@"SELECT EXISTS(SELECT * FROM information_schema.views WHERE table_name = '{view}');";
+            var query = new Query("information_schema.views").Select("*").Where("table_name", view);
+            var result = mySqlCompiler.Compile(query);
+
+            return $@"SELECT EXISTS({result});";
         }
 
         /// <summary>
@@ -43,7 +61,10 @@ namespace QAToolKit.Engine.Database.Generators
         /// <returns></returns>
         protected override string GetStoredProcedureExistScript(string storedProcedure)
         {
-            return $@"SELECT EXISTS(SELECT * FROM information_schema.routines WHERE routine_name = '{storedProcedure}');";
+            var query = new Query("information_schema.routines").Select("*").Where("routine_name", storedProcedure);
+            var result = mySqlCompiler.Compile(query);
+
+            return $@"SELECT EXISTS({result});";
         }
 
         /// <summary>
@@ -51,9 +72,15 @@ namespace QAToolKit.Engine.Database.Generators
         /// </summary>
         /// <param name="recordExist"></param>
         /// <returns></returns>
-        protected override string GetRecordExistScript(DatabaseRule recordExist)
+        protected override string GetRecordExistScript(DatabaseRecordExistRule recordExist)
         {
-            return $@"SELECT EXISTS (SELECT 1 FROM {recordExist.TableName} WHERE {recordExist.PredicateValue});";
+            var query = new Query(recordExist.TableName)
+                .Select("*")
+                .Where(recordExist.ColumnName, recordExist.Operator, recordExist.Value);
+
+            var result = mySqlCompiler.Compile(query);
+
+            return $@"SELECT EXISTS({result});";
         }
 
         /// <summary>
@@ -61,9 +88,15 @@ namespace QAToolKit.Engine.Database.Generators
         /// </summary>
         /// <param name="recordCount"></param>
         /// <returns></returns>
-        protected override string GetRecordCountScript(DatabaseRule recordCount)
+        protected override string GetRecordCountScript(DatabaseRecordCountRule recordCount)
         {
-            return $@"SELECT EXISTS (SELECT 1 FROM {recordCount.TableName} WHERE (SELECT count(*) FROM {recordCount.TableName}){recordCount.PredicateValue});";
+            var countQuery = new Query(recordCount.TableName).AsCount();
+
+            var query = new Query(recordCount.TableName).Select("*").WhereRaw($"({mySqlCompiler.Compile(countQuery)}) {recordCount.Operator} {recordCount.Count}");
+
+            var result = mySqlCompiler.Compile(query);
+
+            return $"SELECT EXISTS ({result});";
         }
     }
 }

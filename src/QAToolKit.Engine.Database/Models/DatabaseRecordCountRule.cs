@@ -3,15 +3,19 @@
     /// <summary>
     /// Database rule
     /// </summary>
-    public class DatabaseRule
+    public class DatabaseRecordCountRule
     {
         /// <summary>
         /// Database table name
         /// </summary>
         public string TableName { get; set; }
         /// <summary>
-        /// Predicate value
+        /// Operator
         /// </summary>
-        public string PredicateValue { get; set; }
+        public string Operator { get; set; }
+        /// <summary>
+        /// Value
+        /// </summary>
+        public long Count { get; set; }
     }
 }
