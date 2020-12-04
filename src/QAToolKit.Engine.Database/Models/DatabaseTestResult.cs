@@ -3,7 +3,8 @@
     /// <summary>
     /// Database test result
     /// </summary>
-    public class DatabaseScriptResult
+    public class DatabaseTestResult
+
     {
         /// <summary>
         /// The result of the script test
@@ -34,7 +35,7 @@
         /// <param name="script"></param>
         /// <param name="databaseTestType"></param>
         /// <param name="databaseKind"></param>
-        public DatabaseScriptResult(bool databaseResult, string variable, string script, DatabaseTestType databaseTestType,
+        public DatabaseTestResult(bool databaseResult, string variable, string script, DatabaseTestType databaseTestType,
             DatabaseKind databaseKind)
         {
             DatabaseResult = databaseResult;

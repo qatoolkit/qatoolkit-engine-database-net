@@ -3,7 +3,8 @@
     /// <summary>
     /// Database script
     /// </summary>
-    public class DatabaseScript
+    public class DatabaseTest
+
     {
         /// <summary>
         /// Variable name of the object beiing tested
@@ -29,7 +30,7 @@
         /// <param name="script"></param>
         /// <param name="databaseTestType"></param>
         /// <param name="databaseKind"></param>
-        public DatabaseScript(string variable, string script, DatabaseTestType databaseTestType, DatabaseKind databaseKind)
+        public DatabaseTest(string variable, string script, DatabaseTestType databaseTestType, DatabaseKind databaseKind)
         {
             Variable = variable;
             Script = script;

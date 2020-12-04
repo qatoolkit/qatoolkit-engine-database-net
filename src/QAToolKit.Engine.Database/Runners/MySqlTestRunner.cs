@@ -14,10 +14,10 @@ namespace QAToolKit.Engine.Database.Runners
         /// <summary>
         /// SqServer test runner instance
         /// </summary>
-        /// <param name="databaseScripts"></param>
+        /// <param name="DatabaseTests"></param>
         /// <param name="options"></param>
-        public MySqlTestRunner(IEnumerable<DatabaseScript> databaseScripts, Action<DatabaseTestRunnerOptions> options)
-            : base(databaseScripts, DatabaseKind.MySQL, options)
+        public MySqlTestRunner(IEnumerable<DatabaseTest> DatabaseTests, Action<DatabaseTestRunnerOptions> options)
+            : base(DatabaseTests, DatabaseKind.MySQL, options)
         { }
 
         /// <summary>
