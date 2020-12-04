@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace QAToolKit.Engine.Database.Test
+namespace QAToolKit.Engine.Database.Test.Generators
 {
     public class SqlServerTestGeneratorTests
     {
