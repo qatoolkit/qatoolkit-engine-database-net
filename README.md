@@ -43,9 +43,9 @@ var generator = new SqlServerTestGenerator(options =>
     });
 });
 
-List<DatabaseScript> scripts = await generator.Generate();
+List<DatabaseTest> scripts = await generator.Generate();
 ```
-The code above will generate a SQLServer `DatabaseScript` list, which will be used by runner to run the tests against database.
+The code above will generate a SQLServer `DatabaseTest` list, which will be used by runner to run the tests against database.
 
 Above example adds all three test types to the generator:
 - `AddDatabaseObjectExitsRule`: will check if a table `mytable` exists in the database.
@@ -62,7 +62,7 @@ var runner = new SqlServerTestRunner(scripts, options =>
     options.AddSQLServerConnection("server=localhost;user=user;password=mypassword;Initial Catalog=myDatabase");
 });
 
-List<DatabaseScriptResult> results = await runner.Run();
+List<DatabaseTestResult> results = await runner.Run();
 ```
 
 Alternatively if you want to use `MySQL` or `PostgreSQL` runners, you can use MySqlTestRunner` or `PostgresqlTestRunner` respectively.
@@ -71,7 +71,6 @@ Please note that **your user must have correct database permissions**. I suggest
 
 ## To-Do
 
-- Implement asserters for processing the `DatabaseScriptResult` list.
 - Add more test types if necessary.
 
 ## License

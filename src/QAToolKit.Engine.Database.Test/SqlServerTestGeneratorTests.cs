@@ -17,9 +17,9 @@ namespace QAToolKit.Engine.Database.Test
                 options.AddDatabaseObjectExitsRule(new string[] { "mytable" }, DatabaseObjectType.Table);
             });
 
-            var results = new List<DatabaseScript>
+            var results = new List<DatabaseTest>
             {
-                new DatabaseScript(
+                new DatabaseTest(
                         "mytable",
                         $@"IF EXISTS (SELECT * FROM [sys].[tables] WHERE [Name] = 'mytable') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.ObjectExist,
@@ -38,9 +38,9 @@ namespace QAToolKit.Engine.Database.Test
                 options.AddDatabaseObjectExitsRule(new string[] { "myview" }, DatabaseObjectType.View);
             });
 
-            var results = new List<DatabaseScript>
+            var results = new List<DatabaseTest>
             {
-                new DatabaseScript(
+                new DatabaseTest(
                         "myview",
                         $@"IF EXISTS (SELECT * FROM [sys].[views] WHERE [Name] = 'myview') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.ObjectExist,
@@ -59,9 +59,9 @@ namespace QAToolKit.Engine.Database.Test
                 options.AddDatabaseObjectExitsRule(new string[] { "mystoredprocedure" }, DatabaseObjectType.StoredProcedure);
             });
 
-            var results = new List<DatabaseScript>
+            var results = new List<DatabaseTest>
             {
-                new DatabaseScript(
+                new DatabaseTest(
                         "mystoredprocedure",
                         $@"IF EXISTS (SELECT * FROM [sys].[procedures] WHERE [Name] = 'mystoredprocedure') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.ObjectExist,
@@ -80,14 +80,14 @@ namespace QAToolKit.Engine.Database.Test
                 options.AddDatabaseObjectExitsRule(new string[] { "table1", "table2" }, DatabaseObjectType.Table);
             });
 
-            var results = new List<DatabaseScript>
+            var results = new List<DatabaseTest>
             {
-               new DatabaseScript(
+               new DatabaseTest(
                         "table1",
                         $@"IF EXISTS (SELECT * FROM [sys].[tables] WHERE [Name] = 'table1') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.SQLServer),
-               new DatabaseScript(
+               new DatabaseTest(
                         "table2",
                         $@"IF EXISTS (SELECT * FROM [sys].[tables] WHERE [Name] = 'table2') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.ObjectExist,
@@ -106,14 +106,14 @@ namespace QAToolKit.Engine.Database.Test
                 options.AddDatabaseObjectExitsRule(new string[] { "view1", "view2" }, DatabaseObjectType.View);
             });
 
-            var results = new List<DatabaseScript>
+            var results = new List<DatabaseTest>
             {
-                 new DatabaseScript(
+                 new DatabaseTest(
                         "view1",
                         $@"IF EXISTS (SELECT * FROM [sys].[views] WHERE [Name] = 'view1') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.SQLServer),
-                 new DatabaseScript(
+                 new DatabaseTest(
                         "view2",
                         $@"IF EXISTS (SELECT * FROM [sys].[views] WHERE [Name] = 'view2') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.ObjectExist,
@@ -132,14 +132,14 @@ namespace QAToolKit.Engine.Database.Test
                 options.AddDatabaseObjectExitsRule(new string[] { "sp1", "sp2" }, DatabaseObjectType.StoredProcedure);
             });
 
-            var results = new List<DatabaseScript>
+            var results = new List<DatabaseTest>
             {
-                new DatabaseScript(
+                new DatabaseTest(
                         "sp1",
                         $@"IF EXISTS (SELECT * FROM [sys].[procedures] WHERE [Name] = 'sp1') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.SQLServer),
-                new DatabaseScript(
+                new DatabaseTest(
                         "sp2",
                         $@"IF EXISTS (SELECT * FROM [sys].[procedures] WHERE [Name] = 'sp2') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.ObjectExist,
@@ -180,9 +180,9 @@ namespace QAToolKit.Engine.Database.Test
                 });
             });
 
-            var results = new List<DatabaseScript>
+            var results = new List<DatabaseTest>
             {
-                new DatabaseScript(
+                new DatabaseTest(
                         "mytable",
                         $@"IF EXISTS (SELECT * FROM [mytable] WHERE [name] = 'myname') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.RecordExist,
@@ -210,9 +210,9 @@ namespace QAToolKit.Engine.Database.Test
                 });
             });
 
-            var results = new List<DatabaseScript>
+            var results = new List<DatabaseTest>
             {
-                new DatabaseScript(
+                new DatabaseTest(
                         "mytable",
                         $@"IF EXISTS (SELECT * FROM [mytable] WHERE (SELECT COUNT(*) AS [count] FROM [mytable]) = 100) BEGIN Select 1 END ELSE BEGIN Select 0 END;",
                         DatabaseTestType.RecordCount,

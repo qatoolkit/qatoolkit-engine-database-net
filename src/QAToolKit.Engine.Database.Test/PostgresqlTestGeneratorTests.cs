@@ -17,9 +17,9 @@ namespace QAToolKit.Engine.Database.Test
                 options.AddDatabaseObjectExitsRule(new string[] { "mytable" }, DatabaseObjectType.Table);
             });
 
-            var results = new List<DatabaseScript>
+            var results = new List<DatabaseTest>
             {
-                new DatabaseScript(
+                new DatabaseTest(
                         "mytable",
                         $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""tables"" WHERE ""table_name"" = 'mytable');",
                         DatabaseTestType.ObjectExist,
@@ -38,9 +38,9 @@ namespace QAToolKit.Engine.Database.Test
                 options.AddDatabaseObjectExitsRule(new string[] { "myview" }, DatabaseObjectType.View);
             });
 
-            var results = new List<DatabaseScript>
+            var results = new List<DatabaseTest>
             {
-                new DatabaseScript(
+                new DatabaseTest(
                         "myview",
                         $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""views"" WHERE ""table_name"" = 'myview');",
                         DatabaseTestType.ObjectExist,
@@ -59,9 +59,9 @@ namespace QAToolKit.Engine.Database.Test
                 options.AddDatabaseObjectExitsRule(new string[] { "mystoredprocedure" }, DatabaseObjectType.StoredProcedure);
             });
 
-            var results = new List<DatabaseScript>
+            var results = new List<DatabaseTest>
             {
-                new DatabaseScript(
+                new DatabaseTest(
                         "mystoredprocedure",
                         $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""routines"" WHERE ""routine_name"" = 'mystoredprocedure');",
                         DatabaseTestType.ObjectExist,
@@ -80,14 +80,14 @@ namespace QAToolKit.Engine.Database.Test
                 options.AddDatabaseObjectExitsRule(new string[] { "table1", "table2" }, DatabaseObjectType.Table);
             });
 
-            var results = new List<DatabaseScript>
+            var results = new List<DatabaseTest>
             {
-               new DatabaseScript(
+               new DatabaseTest(
                         "table1",
                         $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""tables"" WHERE ""table_name"" = 'table1');",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.PostgreSQL),
-               new DatabaseScript(
+               new DatabaseTest(
                         "table2",
                         $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""tables"" WHERE ""table_name"" = 'table2');",
                         DatabaseTestType.ObjectExist,
@@ -106,14 +106,14 @@ namespace QAToolKit.Engine.Database.Test
                 options.AddDatabaseObjectExitsRule(new string[] { "view1", "view2" }, DatabaseObjectType.View);
             });
 
-            var results = new List<DatabaseScript>
+            var results = new List<DatabaseTest>
             {
-                 new DatabaseScript(
+                 new DatabaseTest(
                         "view1",
                         $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""views"" WHERE ""table_name"" = 'view1');",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.PostgreSQL),
-                 new DatabaseScript(
+                 new DatabaseTest(
                         "view2",
                         $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""views"" WHERE ""table_name"" = 'view2');",
                         DatabaseTestType.ObjectExist,
@@ -132,14 +132,14 @@ namespace QAToolKit.Engine.Database.Test
                 options.AddDatabaseObjectExitsRule(new string[] { "sp1", "sp2" }, DatabaseObjectType.StoredProcedure);
             });
 
-            var results = new List<DatabaseScript>
+            var results = new List<DatabaseTest>
             {
-                new DatabaseScript(
+                new DatabaseTest(
                         "sp1",
                         $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""routines"" WHERE ""routine_name"" = 'sp1');",
                         DatabaseTestType.ObjectExist,
                         DatabaseKind.PostgreSQL),
-                new DatabaseScript(
+                new DatabaseTest(
                         "sp2",
                         $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""routines"" WHERE ""routine_name"" = 'sp2');",
                         DatabaseTestType.ObjectExist,
@@ -179,9 +179,9 @@ namespace QAToolKit.Engine.Database.Test
                 });
             });
 
-            var results = new List<DatabaseScript>
+            var results = new List<DatabaseTest>
             {
-                new DatabaseScript(
+                new DatabaseTest(
                         "mytable",
                         $@"SELECT EXISTS(SELECT * FROM ""mytable"" WHERE ""name"" = 'myname');",
                         DatabaseTestType.RecordExist,
@@ -209,9 +209,9 @@ namespace QAToolKit.Engine.Database.Test
                 });
             });
 
-            var results = new List<DatabaseScript>
+            var results = new List<DatabaseTest>
             {
-                new DatabaseScript(
+                new DatabaseTest(
                         "mytable",
                         $@"SELECT EXISTS (SELECT * FROM ""mytable"" WHERE (SELECT COUNT(*) AS ""count"" FROM ""mytable"") = 100);",
                         DatabaseTestType.RecordCount,

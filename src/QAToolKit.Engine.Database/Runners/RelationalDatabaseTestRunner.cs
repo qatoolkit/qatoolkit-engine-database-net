@@ -11,26 +11,26 @@ namespace QAToolKit.Engine.Database.Runners
     /// <summary>
     /// General relational database test runner
     /// </summary>
-    public abstract class RelationalDatabaseTestRunner : IDatabaseTestRunner<DatabaseScriptResult>
+    public abstract class RelationalDatabaseTestRunner : IDatabaseTestRunner<DatabaseTestResult>
     {
         /// <summary>
         /// database test options
         /// </summary>
         protected readonly DatabaseTestRunnerOptions _databaseTestOptions;
-        private readonly IEnumerable<DatabaseScript> _databaseScripts;
+        private readonly IEnumerable<DatabaseTest> _DatabaseTests;
         private readonly DatabaseKind _databaseKind;
 
         /// <summary>
         /// General relational database test runner instance
         /// </summary>
-        /// <param name="databaseScripts"></param>
+        /// <param name="DatabaseTests"></param>
         /// <param name="databaseKind"></param>
         /// <param name="options"></param>
-        public RelationalDatabaseTestRunner(IEnumerable<DatabaseScript> databaseScripts, DatabaseKind databaseKind, Action<DatabaseTestRunnerOptions> options)
+        public RelationalDatabaseTestRunner(IEnumerable<DatabaseTest> DatabaseTests, DatabaseKind databaseKind, Action<DatabaseTestRunnerOptions> options)
         {
             _databaseTestOptions = new DatabaseTestRunnerOptions();
             options?.Invoke(_databaseTestOptions);
-            _databaseScripts = databaseScripts ?? throw new ArgumentNullException($"{nameof(databaseScripts)} is null.");
+            _DatabaseTests = DatabaseTests ?? throw new ArgumentNullException($"{nameof(DatabaseTests)} is null.");
             _databaseKind = databaseKind;
         }
 
@@ -38,22 +38,22 @@ namespace QAToolKit.Engine.Database.Runners
         /// Run the database runner
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<DatabaseScriptResult>> Run()
+        public async Task<IEnumerable<DatabaseTestResult>> Run()
         {
-            var results = new List<DatabaseScriptResult>();
+            var results = new List<DatabaseTestResult>();
 
             using (var dbConnection = GetConnection())
             {
                 dbConnection.Open();
 
-                foreach (var script in _databaseScripts)
+                foreach (var script in _DatabaseTests)
                 {
                     var databaseResult = await dbConnection.ExecuteScalarAsync<int>(script.Script);
 
-                    results.Add(new DatabaseScriptResult(
+                    results.Add(new DatabaseTestResult(
                         Convert.ToBoolean(databaseResult),
-                        script.Script,
                         script.Variable,
+                        script.Script,
                         script.DatabaseTestType,
                         _databaseKind));
                 }

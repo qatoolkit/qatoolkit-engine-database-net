@@ -10,7 +10,7 @@ namespace QAToolKit.Engine.Database.Generators
     /// <summary>
     /// MySQL database test generator
     /// </summary>
-    public abstract class RelationalDatabaseTestGenerator : IDatabaseTestGenerator<DatabaseScript>
+    public abstract class RelationalDatabaseTestGenerator : IDatabaseTestGenerator<DatabaseTest>
     {
         /// <summary>
         /// Database test options
@@ -37,14 +37,14 @@ namespace QAToolKit.Engine.Database.Generators
         /// Generate MySQL database test scripts
         /// </summary>
         /// <returns></returns>
-        public Task<IEnumerable<DatabaseScript>> Generate()
+        public Task<IEnumerable<DatabaseTest>> Generate()
         {
             if (_databaseTestOptions == null)
             {
                 throw new ArgumentNullException($"{nameof(_databaseTestOptions)} is null.");
             }
 
-            var results = new List<DatabaseScript>();
+            var results = new List<DatabaseTest>();
 
             results.AddRange(GenerateObjectExistScripts());
             results.AddRange(GenerateCountRecordsScripts());
@@ -53,9 +53,9 @@ namespace QAToolKit.Engine.Database.Generators
             return Task.FromResult(results.AsEnumerable());
         }
 
-        private IEnumerable<DatabaseScript> GenerateCountRecordsScripts()
+        private IEnumerable<DatabaseTest> GenerateCountRecordsScripts()
         {
-            var results = new List<DatabaseScript>();
+            var results = new List<DatabaseTest>();
 
             if (_databaseTestOptions.DatabaseRecordsCountRules != null)
             {
@@ -65,13 +65,13 @@ namespace QAToolKit.Engine.Database.Generators
             return results;
         }
 
-        private IEnumerable<DatabaseScript> GetRecordCountScripts()
+        private IEnumerable<DatabaseTest> GetRecordCountScripts()
         {
-            var results = new List<DatabaseScript>();
+            var results = new List<DatabaseTest>();
 
             foreach (var record in _databaseTestOptions.DatabaseRecordsCountRules)
             {
-                results.Add(new DatabaseScript(
+                results.Add(new DatabaseTest(
                     record.TableName,
                     GetRecordCountScript(record),
                     DatabaseTestType.RecordCount,
@@ -81,9 +81,9 @@ namespace QAToolKit.Engine.Database.Generators
             return results;
         }
 
-        private IEnumerable<DatabaseScript> GenerateRecordsExistScripts()
+        private IEnumerable<DatabaseTest> GenerateRecordsExistScripts()
         {
-            var results = new List<DatabaseScript>();
+            var results = new List<DatabaseTest>();
 
             if (_databaseTestOptions.DatabaseRecordsExitsRules != null)
             {
@@ -93,13 +93,13 @@ namespace QAToolKit.Engine.Database.Generators
             return results;
         }
 
-        private IEnumerable<DatabaseScript> GetRecordsExistScripts()
+        private IEnumerable<DatabaseTest> GetRecordsExistScripts()
         {
-            var results = new List<DatabaseScript>();
+            var results = new List<DatabaseTest>();
 
             foreach (var record in _databaseTestOptions.DatabaseRecordsExitsRules)
             {
-                results.Add(new DatabaseScript(
+                results.Add(new DatabaseTest(
                     record.TableName,
                     GetRecordExistScript(record),
                     DatabaseTestType.RecordExist,
@@ -109,9 +109,9 @@ namespace QAToolKit.Engine.Database.Generators
             return results;
         }
 
-        private IEnumerable<DatabaseScript> GenerateObjectExistScripts()
+        private IEnumerable<DatabaseTest> GenerateObjectExistScripts()
         {
-            var results = new List<DatabaseScript>();
+            var results = new List<DatabaseTest>();
 
             if (_databaseTestOptions.DatabaseObjectsExistRules != null)
             {
@@ -123,9 +123,9 @@ namespace QAToolKit.Engine.Database.Generators
             return results;
         }
 
-        private IEnumerable<DatabaseScript> GetTableExistScripts()
+        private IEnumerable<DatabaseTest> GetTableExistScripts()
         {
-            var results = new List<DatabaseScript>();
+            var results = new List<DatabaseTest>();
 
             _databaseTestOptions.DatabaseObjectsExistRules.TryGetValue(DatabaseObjectType.Table, out var tableValues);
 
@@ -133,7 +133,7 @@ namespace QAToolKit.Engine.Database.Generators
             {
                 foreach (var table in tableValues)
                 {
-                    results.Add(new DatabaseScript(
+                    results.Add(new DatabaseTest(
                         table,
                         GetTableExistScript(table),
                         DatabaseTestType.ObjectExist,
@@ -144,9 +144,9 @@ namespace QAToolKit.Engine.Database.Generators
             return results;
         }
 
-        private IEnumerable<DatabaseScript> GetViewExistScripts()
+        private IEnumerable<DatabaseTest> GetViewExistScripts()
         {
-            var results = new List<DatabaseScript>();
+            var results = new List<DatabaseTest>();
 
             _databaseTestOptions.DatabaseObjectsExistRules.TryGetValue(DatabaseObjectType.View, out var viewValues);
 
@@ -154,7 +154,7 @@ namespace QAToolKit.Engine.Database.Generators
             {
                 foreach (var view in viewValues)
                 {
-                    results.Add(new DatabaseScript(
+                    results.Add(new DatabaseTest(
                         view,
                         GetViewExistScript(view),
                         DatabaseTestType.ObjectExist,
@@ -165,9 +165,9 @@ namespace QAToolKit.Engine.Database.Generators
             return results;
         }
 
-        private IEnumerable<DatabaseScript> GetStoredProcedureExistScripts()
+        private IEnumerable<DatabaseTest> GetStoredProcedureExistScripts()
         {
-            var results = new List<DatabaseScript>();
+            var results = new List<DatabaseTest>();
 
             _databaseTestOptions.DatabaseObjectsExistRules.TryGetValue(DatabaseObjectType.StoredProcedure, out var storedProcedureValues);
 
@@ -175,7 +175,7 @@ namespace QAToolKit.Engine.Database.Generators
             {
                 foreach (var storedProcedure in storedProcedureValues)
                 {
-                    results.Add(new DatabaseScript(
+                    results.Add(new DatabaseTest(
                         storedProcedure,
                         GetStoredProcedureExistScript(storedProcedure),
                         DatabaseTestType.ObjectExist,
