@@ -3,6 +3,7 @@
 [![CodeQL](https://github.com/qatoolkit/qatoolkit-engine-database-net/workflows/CodeQL%20Analyze/badge.svg)](https://github.com/qatoolkit/qatoolkit-engine-database-net/security/code-scanning)
 [![Sonarcloud Quality gate](https://github.com/qatoolkit/qatoolkit-engine-database-net/workflows/Sonarqube%20Analyze/badge.svg)](https://sonarcloud.io/dashboard?id=qatoolkit_qatoolkit-engine-database-net)
 [![NuGet package](https://img.shields.io/nuget/v/QAToolKit.Engine.DataBase?label=QAToolKit.Engine.Database)](https://www.nuget.org/packages/QAToolKit.Engine.Database/)
+[![Discord](https://img.shields.io/discord/787220825127780354?color=%23267CB9&label=Discord%20chat)](https://discord.gg/hYs6ayYQC5)
 
 ## Description
 `QAToolKit.Engine.Database` is a .NET standard library, which can be used to do database fitness tests. For example, if you want to test that table is present in database, or certain number of records exist in specific table or if a record exists.
@@ -13,6 +14,10 @@
 - `RecordExist`: Check if a record exists in specific table.
 
 Currently supports only relational databases: `SQLServer`, `MySQL` and `PostgreSQL`.
+
+Get in touch with me on:
+
+[![Discord](https://img.shields.io/discord/787220825127780354?color=%23267CB9&label=Discord%20chat)](https://discord.gg/hYs6ayYQC5)
 
 ## Sample
 
@@ -77,7 +82,7 @@ Please note that **your user must have correct database permissions**. I suggest
 
 MIT License
 
-Copyright (c) 2020 Miha Jakovac
+Copyright (c) 2020-2021 Miha Jakovac
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
