@@ -65,8 +65,6 @@ namespace QAToolKit.Engine.Database.Generators
         /// <returns></returns>
         protected override string GetRecordExistScript(DatabaseRecordExistRule recordExist)
         {
-            //return $@"IF EXISTS(SELECT 1 FROM {recordExist.TableName} WHERE {recordExist.PredicateValue}) BEGIN Select 1 END ELSE BEGIN Select 0 END";
-
             var query = new Query(recordExist.TableName)
                 .Select("*")
                 .Where(recordExist.ColumnName, recordExist.Operator, recordExist.Value);
