@@ -89,5 +89,15 @@ namespace QAToolKit.Engine.Database.Generators
 
             return $"SELECT EXISTS ({result});";
         }
+
+        /// <summary>
+        /// Get PostgreSQL custom script
+        /// </summary>
+        /// <param name="script"></param>
+        /// <returns></returns>
+        protected override string GetCustomScript(string script)
+        {
+            return $"SELECT EXISTS({script});";
+        }
     }
 }
