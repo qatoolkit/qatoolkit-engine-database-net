@@ -221,5 +221,30 @@ namespace QAToolKit.Engine.Database.Test.Generators
             results.ShouldEqual(await generator.Generate());
             Assert.Equal(DatabaseKind.PostgreSQL, generator.DatabaseKind);
         }
+
+        [Fact]
+        public async Task PostgresqlCustomScriptTest_Success()
+        {
+            var generator = new PostgresqlTestGenerator(options =>
+            {
+                options.AddCustomSqlRule(
+                new List<string>()
+                {
+                    @"SELECT * FROM ""mytable"" WHERE (SELECT COUNT(*) AS ""count"" FROM ""mytable"") = 10"
+                });
+            });
+
+            var results = new List<DatabaseTest>
+            {
+                new DatabaseTest(
+                        null,
+                        $@"SELECT EXISTS(SELECT * FROM ""mytable"" WHERE (SELECT COUNT(*) AS ""count"" FROM ""mytable"") = 10);",
+                        DatabaseTestType.CustomScript,
+                        DatabaseKind.PostgreSQL)
+            }.ToExpectedObject();
+
+            results.ShouldEqual(await generator.Generate());
+            Assert.Equal(DatabaseKind.PostgreSQL, generator.DatabaseKind);
+        }
     }
 }

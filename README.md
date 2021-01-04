@@ -12,6 +12,7 @@
 - `ObjectExits`: Check if table, view or stored procedure exists.
 - `RecordCount`: Check if record count in specific table equals an expression.
 - `RecordExist`: Check if a record exists in specific table.
+- `CustomScript`: Check if a custom script returns results. You can write a custom select query and check if it has any results.
 
 Currently supports only relational databases: `SQLServer`, `MySQL` and `PostgreSQL`.
 
@@ -46,6 +47,13 @@ var generator = new SqlServerTestGenerator(options =>
             Operator = "=" 
         } 
     });
+
+    options.AddCustomSqlRule(
+        new List<string>()
+        {
+            "SELECT * FROM [table] WHERE timestamp = '2016-05-31'",
+            "SELECT * FROM [table] WHERE value < 1"
+        });
 });
 
 List<DatabaseTest> scripts = await generator.Generate();
@@ -56,6 +64,7 @@ Above example adds all three test types to the generator:
 - `AddDatabaseObjectExitsRule`: will check if a table `mytable` exists in the database.
 - `AddDatabaseRecordExitsRule`: will check if a record in table `mytable` with `name` equals `myname` exists.
 - `AddDatabaseRecordsCountRule`: will check if there is exactly 100 records in the `mytable` table.
+- `AddCustomSqlRule`: will check if a custom script returns any results. This way you have a lot of freedom to define your own queries. Please note, that the query you specify is wrapped in the `EXISTS` clause for a specific database vendor.
 
 Alternatively if you want to use `MySQL` or `PostgreSQL` generators, you can use MySqlTestGenerator` or `PostgresqlTestGenerator` respectively.
 
