@@ -16,6 +16,10 @@
         /// <summary>
         /// Assert if a certain query returns the number of records
         /// </summary>
-        RecordCount = 2
+        RecordCount = 2,
+        /// <summary>
+        /// Custom sql script
+        /// </summary>
+        CustomScript = 3
     }
 }

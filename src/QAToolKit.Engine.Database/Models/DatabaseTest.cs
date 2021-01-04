@@ -24,7 +24,7 @@
         public DatabaseKind DatabaseKind { get; private set; }
 
         /// <summary>
-        /// Create new instance of the script
+        /// Create new instance of the database test
         /// </summary>
         /// <param name="variable"></param>
         /// <param name="script"></param>
@@ -33,6 +33,20 @@
         public DatabaseTest(string variable, string script, DatabaseTestType databaseTestType, DatabaseKind databaseKind)
         {
             Variable = variable;
+            Script = script;
+            DatabaseTestType = databaseTestType;
+            DatabaseKind = databaseKind;
+        }
+
+        /// <summary>
+        /// Create new instance of the database test
+        /// </summary>
+        /// <param name="script"></param>
+        /// <param name="databaseTestType"></param>
+        /// <param name="databaseKind"></param>
+        public DatabaseTest(string script, DatabaseTestType databaseTestType, DatabaseKind databaseKind)
+        {
+            Variable = null;
             Script = script;
             DatabaseTestType = databaseTestType;
             DatabaseKind = databaseKind;

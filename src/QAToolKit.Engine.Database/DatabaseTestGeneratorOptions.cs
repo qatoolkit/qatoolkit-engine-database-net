@@ -1,4 +1,5 @@
 ﻿using QAToolKit.Engine.Database.Models;
+using System;
 using System.Collections.Generic;
 
 namespace QAToolKit.Engine.Database
@@ -11,6 +12,7 @@ namespace QAToolKit.Engine.Database
         internal Dictionary<DatabaseObjectType, string[]> DatabaseObjectsExistRules { get; private set; }
         internal List<DatabaseRecordCountRule> DatabaseRecordsCountRules { get; private set; }
         internal List<DatabaseRecordExistRule> DatabaseRecordsExitsRules { get; private set; }
+        internal List<string> CustomSqlRules { get; private set; }
 
         /// <summary>
         /// Add database object exist rules
@@ -20,6 +22,9 @@ namespace QAToolKit.Engine.Database
         /// <returns></returns>
         public DatabaseTestGeneratorOptions AddDatabaseObjectExitsRule(string[] objects, DatabaseObjectType databaseObjectType)
         {
+            if (objects == null)
+                throw new ArgumentNullException($"{nameof(objects)} is null.");
+
             if (DatabaseObjectsExistRules == null)
             {
                 DatabaseObjectsExistRules = new Dictionary<DatabaseObjectType, string[]>();
@@ -37,6 +42,9 @@ namespace QAToolKit.Engine.Database
         /// <returns></returns>
         public DatabaseTestGeneratorOptions AddDatabaseRecordsCountRule(List<DatabaseRecordCountRule> objects)
         {
+            if (objects == null)
+                throw new ArgumentNullException($"{nameof(objects)} is null.");
+
             if (DatabaseRecordsCountRules == null)
             {
                 DatabaseRecordsCountRules = new List<DatabaseRecordCountRule>();
@@ -48,18 +56,41 @@ namespace QAToolKit.Engine.Database
         }
 
         /// <summary>
-        /// Add database record exsit rules
+        /// Add database record exsist rules
         /// </summary>
         /// <param name="objects"></param>
         /// <returns></returns>
         public DatabaseTestGeneratorOptions AddDatabaseRecordExitsRule(List<DatabaseRecordExistRule> objects)
         {
+            if (objects == null)
+                throw new ArgumentNullException($"{nameof(objects)} is null.");
+
             if (DatabaseRecordsExitsRules == null)
             {
                 DatabaseRecordsExitsRules = new List<DatabaseRecordExistRule>();
             }
 
             DatabaseRecordsExitsRules.AddRange(objects);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Add custom sql rule
+        /// </summary>
+        /// <param name="sqlStatements"></param>
+        /// <returns></returns>
+        public DatabaseTestGeneratorOptions AddCustomSqlRule(List<string> sqlStatements)
+        {
+            if (sqlStatements == null)
+                throw new ArgumentNullException($"{nameof(sqlStatements)} is null.");
+
+            if (CustomSqlRules == null)
+            {
+                CustomSqlRules = new List<string>();
+            }
+
+            CustomSqlRules.AddRange(sqlStatements);
 
             return this;
         }

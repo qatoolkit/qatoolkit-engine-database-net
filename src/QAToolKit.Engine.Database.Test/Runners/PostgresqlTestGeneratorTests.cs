@@ -1,11 +1,8 @@
-﻿using ExpectedObjects;
-using NSubstitute;
+﻿using NSubstitute;
 using QAToolKit.Engine.Database.Generators;
 using QAToolKit.Engine.Database.Models;
 using QAToolKit.Engine.Database.Runners;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 

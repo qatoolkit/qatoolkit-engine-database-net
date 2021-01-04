@@ -89,5 +89,15 @@ namespace QAToolKit.Engine.Database.Generators
 
             return $"IF EXISTS ({result}) BEGIN Select 1 END ELSE BEGIN Select 0 END;";
         }
+
+        /// <summary>
+        /// Get SQLServer custom script
+        /// </summary>
+        /// <param name="script"></param>
+        /// <returns></returns>
+        protected override string GetCustomScript(string script)
+        {
+            return $"IF EXISTS ({script}) BEGIN Select 1 END ELSE BEGIN Select 0 END;";
+        }
     }
 }

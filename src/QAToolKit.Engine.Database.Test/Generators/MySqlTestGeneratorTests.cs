@@ -191,7 +191,7 @@ namespace QAToolKit.Engine.Database.Test.Generators
             results.ShouldEqual(await generator.Generate());
             Assert.Equal(DatabaseKind.MySQL, generator.DatabaseKind);
         }
-     
+
         [Fact]
         public async Task MySqlRecordCountScriptTest_Success()
         {
@@ -215,6 +215,31 @@ namespace QAToolKit.Engine.Database.Test.Generators
                         "mytable",
                         $@"SELECT EXISTS (SELECT * FROM `mytable` WHERE (SELECT COUNT(*) AS `count` FROM `mytable`) = 100);",
                         DatabaseTestType.RecordCount,
+                        DatabaseKind.MySQL)
+            }.ToExpectedObject();
+
+            results.ShouldEqual(await generator.Generate());
+            Assert.Equal(DatabaseKind.MySQL, generator.DatabaseKind);
+        }
+
+        [Fact]
+        public async Task MySqlCustomScriptTest_Success()
+        {
+            var generator = new MySqlTestGenerator(options =>
+            {
+                options.AddCustomSqlRule(
+                    new List<string>()
+                    {
+                        "SELECT * FROM mytable WHERE (SELECT COUNT(*) AS count FROM mytable) = 50"
+                    });
+            });
+
+            var results = new List<DatabaseTest>
+            {
+                new DatabaseTest(
+                        null,
+                        $@"SELECT EXISTS (SELECT * FROM mytable WHERE (SELECT COUNT(*) AS count FROM mytable) = 50);",
+                        DatabaseTestType.CustomScript,
                         DatabaseKind.MySQL)
             }.ToExpectedObject();
 

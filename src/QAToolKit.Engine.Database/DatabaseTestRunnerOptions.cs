@@ -1,4 +1,5 @@
 ﻿using QAToolKit.Engine.Database.Models;
+using System;
 
 namespace QAToolKit.Engine.Database
 {
@@ -17,6 +18,9 @@ namespace QAToolKit.Engine.Database
         /// <returns></returns>
         public DatabaseTestRunnerOptions AddSQLServerConnection(string serverConnection)
         {
+            if (serverConnection == null)
+                throw new ArgumentNullException($"{nameof(serverConnection)} is null.");
+
             DatabaseKind = DatabaseKind.SQLServer;
             ConnectionString = serverConnection;
             return this;
@@ -29,6 +33,9 @@ namespace QAToolKit.Engine.Database
         /// <returns></returns>
         public DatabaseTestRunnerOptions AddMySQLConnection(string serverConnection)
         {
+            if (serverConnection == null)
+                throw new ArgumentNullException($"{nameof(serverConnection)} is null.");
+
             DatabaseKind = DatabaseKind.MySQL;
             ConnectionString = serverConnection;
             return this;
@@ -41,6 +48,9 @@ namespace QAToolKit.Engine.Database
         /// <returns></returns>
         public DatabaseTestRunnerOptions AddPostgreSQLConnection(string serverConnection)
         {
+            if (serverConnection == null)
+                throw new ArgumentNullException($"{nameof(serverConnection)} is null.");
+
             DatabaseKind = DatabaseKind.PostgreSQL;
             ConnectionString = serverConnection;
             return this;

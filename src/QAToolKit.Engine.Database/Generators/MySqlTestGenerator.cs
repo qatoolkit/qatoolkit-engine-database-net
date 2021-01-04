@@ -1,13 +1,7 @@
 ﻿using QAToolKit.Engine.Database.Models;
-using System;
 using SqlKata;
 using SqlKata.Compilers;
-using SqlKata.Extensions;
-using MySql.Data.MySqlClient;
-using System.Text.RegularExpressions;
-using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
+using System;
 
 namespace QAToolKit.Engine.Database.Generators
 {
@@ -97,6 +91,16 @@ namespace QAToolKit.Engine.Database.Generators
             var result = mySqlCompiler.Compile(query);
 
             return $"SELECT EXISTS ({result});";
+        }
+
+        /// <summary>
+        /// Get MySQL custom script
+        /// </summary>
+        /// <param name="script"></param>
+        /// <returns></returns>
+        protected override string GetCustomScript(string script)
+        {
+            return $"SELECT EXISTS ({script});";
         }
     }
 }

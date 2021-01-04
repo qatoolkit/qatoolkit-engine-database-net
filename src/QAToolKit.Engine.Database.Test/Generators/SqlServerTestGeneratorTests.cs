@@ -222,5 +222,30 @@ namespace QAToolKit.Engine.Database.Test.Generators
             results.ShouldEqual(await generator.Generate());
             Assert.Equal(DatabaseKind.SQLServer, generator.DatabaseKind);
         }
+
+        [Fact]
+        public async Task SqlServerCustomScriptTest_Success()
+        {
+            var generator = new SqlServerTestGenerator(options =>
+            {
+                options.AddCustomSqlRule(
+                new List<string>()
+                {
+                    "SELECT * FROM [mytable] WHERE (SELECT COUNT(*) AS [count] FROM [mytable]) = 50"
+                });
+            });
+
+            var results = new List<DatabaseTest>
+            {
+                new DatabaseTest(
+                        null,
+                        $@"IF EXISTS (SELECT * FROM [mytable] WHERE (SELECT COUNT(*) AS [count] FROM [mytable]) = 50) BEGIN Select 1 END ELSE BEGIN Select 0 END;",
+                        DatabaseTestType.CustomScript,
+                        DatabaseKind.SQLServer)
+            }.ToExpectedObject();
+
+            results.ShouldEqual(await generator.Generate());
+            Assert.Equal(DatabaseKind.SQLServer, generator.DatabaseKind);
+        }
     }
 }

@@ -49,8 +49,36 @@ namespace QAToolKit.Engine.Database.Generators
             results.AddRange(GenerateObjectExistScripts());
             results.AddRange(GenerateCountRecordsScripts());
             results.AddRange(GenerateRecordsExistScripts());
+            results.AddRange(GenerateCustomScripts());
 
             return Task.FromResult(results.AsEnumerable());
+        }
+
+        private IEnumerable<DatabaseTest> GenerateCustomScripts()
+        {
+            var results = new List<DatabaseTest>();
+
+            if (_databaseTestOptions.CustomSqlRules != null)
+            {
+                results.AddRange(GetCustomScripts());
+            }
+
+            return results;
+        }
+
+        private IEnumerable<DatabaseTest> GetCustomScripts()
+        {
+            var results = new List<DatabaseTest>();
+
+            foreach (var record in _databaseTestOptions.CustomSqlRules)
+            {
+                results.Add(new DatabaseTest(
+                    GetCustomScript(record),
+                    DatabaseTestType.CustomScript,
+                    DatabaseKind));
+            }
+
+            return results;
         }
 
         private IEnumerable<DatabaseTest> GenerateCountRecordsScripts()
@@ -220,5 +248,12 @@ namespace QAToolKit.Engine.Database.Generators
         /// <param name="recordCount"></param>
         /// <returns></returns>
         protected abstract string GetRecordCountScript(DatabaseRecordCountRule recordCount);
+
+        /// <summary>
+        /// Get custom sql script
+        /// </summary>
+        /// <param name="script"></param>
+        /// <returns></returns>
+        protected abstract string GetCustomScript(string script);
     }
 }
