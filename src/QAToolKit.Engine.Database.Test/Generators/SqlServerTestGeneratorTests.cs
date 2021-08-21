@@ -14,20 +14,20 @@ namespace QAToolKit.Engine.Database.Test.Generators
         {
             var generator = new SqlServerTestGenerator(options =>
             {
-                options.AddDatabaseObjectExitsRule(new string[] { "mytable" }, DatabaseObjectType.Table);
+                options.AddDatabaseObjectExitsRule(new string[] {"mytable"}, DatabaseObjectType.Table);
             });
 
-            var results = new List<DatabaseTest>
+            var results = new List<Models.Test>
             {
-                new DatabaseTest(
-                        "mytable",
-                        $@"IF EXISTS (SELECT * FROM [sys].[tables] WHERE [Name] = 'mytable') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind.SQLServer)
+                new Models.Test(
+                    "mytable",
+                    $@"IF EXISTS (SELECT * FROM [sys].[tables] WHERE [Name] = 'mytable') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
+                    TestType.ObjectExist,
+                    DatabaseKind.SqlServer)
             }.ToExpectedObject();
 
             results.ShouldEqual(await generator.Generate());
-            Assert.Equal(DatabaseKind.SQLServer, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.SqlServer, generator.DatabaseKind);
         }
 
         [Fact]
@@ -35,20 +35,20 @@ namespace QAToolKit.Engine.Database.Test.Generators
         {
             var generator = new SqlServerTestGenerator(options =>
             {
-                options.AddDatabaseObjectExitsRule(new string[] { "myview" }, DatabaseObjectType.View);
+                options.AddDatabaseObjectExitsRule(new string[] {"myview"}, DatabaseObjectType.View);
             });
 
-            var results = new List<DatabaseTest>
+            var results = new List<Models.Test>
             {
-                new DatabaseTest(
-                        "myview",
-                        $@"IF EXISTS (SELECT * FROM [sys].[views] WHERE [Name] = 'myview') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind.SQLServer)
+                new Models.Test(
+                    "myview",
+                    $@"IF EXISTS (SELECT * FROM [sys].[views] WHERE [Name] = 'myview') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
+                    TestType.ObjectExist,
+                    DatabaseKind.SqlServer)
             }.ToExpectedObject();
 
             results.ShouldEqual(await generator.Generate());
-            Assert.Equal(DatabaseKind.SQLServer, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.SqlServer, generator.DatabaseKind);
         }
 
         [Fact]
@@ -56,20 +56,21 @@ namespace QAToolKit.Engine.Database.Test.Generators
         {
             var generator = new SqlServerTestGenerator(options =>
             {
-                options.AddDatabaseObjectExitsRule(new string[] { "mystoredprocedure" }, DatabaseObjectType.StoredProcedure);
+                options.AddDatabaseObjectExitsRule(new string[] {"mystoredprocedure"},
+                    DatabaseObjectType.StoredProcedure);
             });
 
-            var results = new List<DatabaseTest>
+            var results = new List<Models.Test>
             {
-                new DatabaseTest(
-                        "mystoredprocedure",
-                        $@"IF EXISTS (SELECT * FROM [sys].[procedures] WHERE [Name] = 'mystoredprocedure') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind.SQLServer)
+                new Models.Test(
+                    "mystoredprocedure",
+                    $@"IF EXISTS (SELECT * FROM [sys].[procedures] WHERE [Name] = 'mystoredprocedure') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
+                    TestType.ObjectExist,
+                    DatabaseKind.SqlServer)
             }.ToExpectedObject();
 
             results.ShouldEqual(await generator.Generate());
-            Assert.Equal(DatabaseKind.SQLServer, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.SqlServer, generator.DatabaseKind);
         }
 
         [Fact]
@@ -77,25 +78,25 @@ namespace QAToolKit.Engine.Database.Test.Generators
         {
             var generator = new SqlServerTestGenerator(options =>
             {
-                options.AddDatabaseObjectExitsRule(new string[] { "table1", "table2" }, DatabaseObjectType.Table);
+                options.AddDatabaseObjectExitsRule(new string[] {"table1", "table2"}, DatabaseObjectType.Table);
             });
 
-            var results = new List<DatabaseTest>
+            var results = new List<Models.Test>
             {
-               new DatabaseTest(
-                        "table1",
-                        $@"IF EXISTS (SELECT * FROM [sys].[tables] WHERE [Name] = 'table1') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind.SQLServer),
-               new DatabaseTest(
-                        "table2",
-                        $@"IF EXISTS (SELECT * FROM [sys].[tables] WHERE [Name] = 'table2') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind.SQLServer)
+                new Models.Test(
+                    "table1",
+                    $@"IF EXISTS (SELECT * FROM [sys].[tables] WHERE [Name] = 'table1') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
+                    TestType.ObjectExist,
+                    DatabaseKind.SqlServer),
+                new Models.Test(
+                    "table2",
+                    $@"IF EXISTS (SELECT * FROM [sys].[tables] WHERE [Name] = 'table2') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
+                    TestType.ObjectExist,
+                    DatabaseKind.SqlServer)
             }.ToExpectedObject();
 
             results.ShouldEqual(await generator.Generate());
-            Assert.Equal(DatabaseKind.SQLServer, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.SqlServer, generator.DatabaseKind);
         }
 
         [Fact]
@@ -103,25 +104,25 @@ namespace QAToolKit.Engine.Database.Test.Generators
         {
             var generator = new SqlServerTestGenerator(options =>
             {
-                options.AddDatabaseObjectExitsRule(new string[] { "view1", "view2" }, DatabaseObjectType.View);
+                options.AddDatabaseObjectExitsRule(new string[] {"view1", "view2"}, DatabaseObjectType.View);
             });
 
-            var results = new List<DatabaseTest>
+            var results = new List<Models.Test>
             {
-                 new DatabaseTest(
-                        "view1",
-                        $@"IF EXISTS (SELECT * FROM [sys].[views] WHERE [Name] = 'view1') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind.SQLServer),
-                 new DatabaseTest(
-                        "view2",
-                        $@"IF EXISTS (SELECT * FROM [sys].[views] WHERE [Name] = 'view2') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind.SQLServer)
+                new Models.Test(
+                    "view1",
+                    $@"IF EXISTS (SELECT * FROM [sys].[views] WHERE [Name] = 'view1') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
+                    TestType.ObjectExist,
+                    DatabaseKind.SqlServer),
+                new Models.Test(
+                    "view2",
+                    $@"IF EXISTS (SELECT * FROM [sys].[views] WHERE [Name] = 'view2') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
+                    TestType.ObjectExist,
+                    DatabaseKind.SqlServer)
             }.ToExpectedObject();
 
             results.ShouldEqual(await generator.Generate());
-            Assert.Equal(DatabaseKind.SQLServer, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.SqlServer, generator.DatabaseKind);
         }
 
         [Fact]
@@ -129,25 +130,25 @@ namespace QAToolKit.Engine.Database.Test.Generators
         {
             var generator = new SqlServerTestGenerator(options =>
             {
-                options.AddDatabaseObjectExitsRule(new string[] { "sp1", "sp2" }, DatabaseObjectType.StoredProcedure);
+                options.AddDatabaseObjectExitsRule(new string[] {"sp1", "sp2"}, DatabaseObjectType.StoredProcedure);
             });
 
-            var results = new List<DatabaseTest>
+            var results = new List<Models.Test>
             {
-                new DatabaseTest(
-                        "sp1",
-                        $@"IF EXISTS (SELECT * FROM [sys].[procedures] WHERE [Name] = 'sp1') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind.SQLServer),
-                new DatabaseTest(
-                        "sp2",
-                        $@"IF EXISTS (SELECT * FROM [sys].[procedures] WHERE [Name] = 'sp2') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind.SQLServer)
+                new Models.Test(
+                    "sp1",
+                    $@"IF EXISTS (SELECT * FROM [sys].[procedures] WHERE [Name] = 'sp1') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
+                    TestType.ObjectExist,
+                    DatabaseKind.SqlServer),
+                new Models.Test(
+                    "sp2",
+                    $@"IF EXISTS (SELECT * FROM [sys].[procedures] WHERE [Name] = 'sp2') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
+                    TestType.ObjectExist,
+                    DatabaseKind.SqlServer)
             }.ToExpectedObject();
 
             results.ShouldEqual(await generator.Generate());
-            Assert.Equal(DatabaseKind.SQLServer, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.SqlServer, generator.DatabaseKind);
         }
 
         [Fact]
@@ -155,10 +156,10 @@ namespace QAToolKit.Engine.Database.Test.Generators
         {
             var generator = new SqlServerTestGenerator(options =>
             {
-                options.AddDatabaseObjectExitsRule(new string[] { "sp1", "sp2" }, DatabaseObjectType.StoredProcedure);
+                options.AddDatabaseObjectExitsRule(new string[] {"sp1", "sp2"}, DatabaseObjectType.StoredProcedure);
             });
 
-            Assert.Equal(DatabaseKind.SQLServer, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.SqlServer, generator.DatabaseKind);
         }
 
 
@@ -168,29 +169,29 @@ namespace QAToolKit.Engine.Database.Test.Generators
             var generator = new SqlServerTestGenerator(options =>
             {
                 options.AddDatabaseRecordExitsRule(
-                new List<DatabaseRecordExistRule>()
-                {
-                    new DatabaseRecordExistRule()
+                    new List<RecordExistRule>()
                     {
-                        TableName = "mytable",
-                        ColumnName = "name",
-                        Operator = "=",
-                        Value = "myname"
-                    }
-                });
+                        new RecordExistRule()
+                        {
+                            TableName = "mytable",
+                            ColumnName = "name",
+                            Operator = "=",
+                            Value = "myname"
+                        }
+                    });
             });
 
-            var results = new List<DatabaseTest>
+            var results = new List<Models.Test>
             {
-                new DatabaseTest(
-                        "mytable",
-                        $@"IF EXISTS (SELECT * FROM [mytable] WHERE [name] = 'myname') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
-                        DatabaseTestType.RecordExist,
-                        DatabaseKind.SQLServer)
+                new Models.Test(
+                    "mytable",
+                    $@"IF EXISTS (SELECT * FROM [mytable] WHERE [name] = 'myname') BEGIN Select 1 END ELSE BEGIN Select 0 END;",
+                    TestType.RecordExist,
+                    DatabaseKind.SqlServer)
             }.ToExpectedObject();
 
             results.ShouldEqual(await generator.Generate());
-            Assert.Equal(DatabaseKind.SQLServer, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.SqlServer, generator.DatabaseKind);
         }
 
         [Fact]
@@ -199,28 +200,28 @@ namespace QAToolKit.Engine.Database.Test.Generators
             var generator = new SqlServerTestGenerator(options =>
             {
                 options.AddDatabaseRecordsCountRule(
-                new List<DatabaseRecordCountRule>()
-                {
-                    new DatabaseRecordCountRule()
+                    new List<RecordCountRule>()
                     {
-                        TableName = "mytable",
-                        Operator = "=",
-                        Count = 100
-                    }
-                });
+                        new RecordCountRule()
+                        {
+                            TableName = "mytable",
+                            Operator = "=",
+                            Count = 100
+                        }
+                    });
             });
 
-            var results = new List<DatabaseTest>
+            var results = new List<Models.Test>
             {
-                new DatabaseTest(
-                        "mytable",
-                        $@"IF EXISTS (SELECT * FROM [mytable] WHERE (SELECT COUNT(*) AS [count] FROM [mytable]) = 100) BEGIN Select 1 END ELSE BEGIN Select 0 END;",
-                        DatabaseTestType.RecordCount,
-                        DatabaseKind.SQLServer)
+                new Models.Test(
+                    "mytable",
+                    $@"IF EXISTS (SELECT * FROM [mytable] WHERE (SELECT COUNT(*) AS [count] FROM [mytable]) = 100) BEGIN Select 1 END ELSE BEGIN Select 0 END;",
+                    TestType.RecordCount,
+                    DatabaseKind.SqlServer)
             }.ToExpectedObject();
 
             results.ShouldEqual(await generator.Generate());
-            Assert.Equal(DatabaseKind.SQLServer, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.SqlServer, generator.DatabaseKind);
         }
 
         [Fact]
@@ -229,23 +230,101 @@ namespace QAToolKit.Engine.Database.Test.Generators
             var generator = new SqlServerTestGenerator(options =>
             {
                 options.AddCustomSqlRule(
-                new List<string>()
-                {
-                    "SELECT * FROM [mytable] WHERE (SELECT COUNT(*) AS [count] FROM [mytable]) = 50"
-                });
+                    new List<string>()
+                    {
+                        "SELECT * FROM [mytable] WHERE (SELECT COUNT(*) AS [count] FROM [mytable]) = 50"
+                    });
             });
 
-            var results = new List<DatabaseTest>
+            var results = new List<Models.Test>
             {
-                new DatabaseTest(
-                        null,
-                        $@"IF EXISTS (SELECT * FROM [mytable] WHERE (SELECT COUNT(*) AS [count] FROM [mytable]) = 50) BEGIN Select 1 END ELSE BEGIN Select 0 END;",
-                        DatabaseTestType.CustomScript,
-                        DatabaseKind.SQLServer)
+                new Models.Test(
+                    null,
+                    $@"IF EXISTS (SELECT * FROM [mytable] WHERE (SELECT COUNT(*) AS [count] FROM [mytable]) = 50) BEGIN Select 1 END ELSE BEGIN Select 0 END;",
+                    TestType.CustomScript,
+                    DatabaseKind.SqlServer)
             }.ToExpectedObject();
 
             results.ShouldEqual(await generator.Generate());
-            Assert.Equal(DatabaseKind.SQLServer, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.SqlServer, generator.DatabaseKind);
+        }
+
+        [Fact]
+        public async Task SqlServerQueryStatisticsScriptWithTimeAndIOTest_Success()
+        {
+            var generator = new SqlServerTestGenerator(options =>
+            {
+                options.CaptureQueryStatistics(
+                    new List<string>()
+                    {
+                        "SELECT * FROM [mytable] WHERE (SELECT COUNT(*) AS [count] FROM [mytable]) = 50"
+                    }.ToArray(),
+                    new QueryStatisticsType[] {QueryStatisticsType.Time, QueryStatisticsType.Io});
+            });
+
+            var results = new List<Models.Test>
+            {
+                new Models.Test(
+                    null,
+                    $@"SET STATISTICS TIME ON;SET STATISTICS IO ON;SELECT * FROM [mytable] WHERE (SELECT COUNT(*) AS [count] FROM [mytable]) = 50;SET STATISTICS TIME OFF;SET STATISTICS IO OFF;",
+                    TestType.QueryStatistics,
+                    DatabaseKind.SqlServer)
+            }.ToExpectedObject();
+
+            results.ShouldEqual(await generator.Generate());
+            Assert.Equal(DatabaseKind.SqlServer, generator.DatabaseKind);
+        }
+
+        [Fact]
+        public async Task SqlServerQueryStatisticsScriptWithTimeTest_Success()
+        {
+            var generator = new SqlServerTestGenerator(options =>
+            {
+                options.CaptureQueryStatistics(
+                    new List<string>()
+                    {
+                        "SELECT * FROM [mytable] WHERE (SELECT COUNT(*) AS [count] FROM [mytable]) = 50"
+                    }.ToArray(),
+                    new QueryStatisticsType[] {QueryStatisticsType.Time});
+            });
+
+            var results = new List<Models.Test>
+            {
+                new Models.Test(
+                    null,
+                    $@"SET STATISTICS TIME ON;SELECT * FROM [mytable] WHERE (SELECT COUNT(*) AS [count] FROM [mytable]) = 50;SET STATISTICS TIME OFF;",
+                    TestType.QueryStatistics,
+                    DatabaseKind.SqlServer)
+            }.ToExpectedObject();
+
+            results.ShouldEqual(await generator.Generate());
+            Assert.Equal(DatabaseKind.SqlServer, generator.DatabaseKind);
+        }
+
+        [Fact]
+        public async Task SqlServerQueryStatisticsScriptWithIOTest_Success()
+        {
+            var generator = new SqlServerTestGenerator(options =>
+            {
+                options.CaptureQueryStatistics(
+                    new[]
+                    {
+                        "SELECT * FROM [mytable] WHERE (SELECT COUNT(*) AS [count] FROM [mytable]) = 50"
+                    },
+                    new QueryStatisticsType[] {QueryStatisticsType.Io});
+            });
+
+            var results = new List<Models.Test>
+            {
+                new Models.Test(
+                    null,
+                    $@"SET STATISTICS IO ON;SELECT * FROM [mytable] WHERE (SELECT COUNT(*) AS [count] FROM [mytable]) = 50;SET STATISTICS IO OFF;",
+                    TestType.QueryStatistics,
+                    DatabaseKind.SqlServer)
+            }.ToExpectedObject();
+
+            results.ShouldEqual(await generator.Generate());
+            Assert.Equal(DatabaseKind.SqlServer, generator.DatabaseKind);
         }
     }
 }

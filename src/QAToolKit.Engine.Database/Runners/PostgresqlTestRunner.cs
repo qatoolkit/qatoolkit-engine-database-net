@@ -1,32 +1,53 @@
 ﻿using Npgsql;
 using QAToolKit.Engine.Database.Models;
 using System;
-using System.Collections.Generic;
-using System.Data;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using Dapper;
+using QAToolKit.Engine.Database.Interfaces;
 
 namespace QAToolKit.Engine.Database.Runners
 {
     /// <summary>
-    /// SqlServer test runner
+    /// Postgresql server test runner
     /// </summary>
-    public class PostgresqlTestRunner : RelationalDatabaseTestRunner
+    public class PostgresqlTestRunner : ISqlRunner
     {
         /// <summary>
-        /// SqServer test runner instance
+        /// Create new instance of Postgresql server runner
         /// </summary>
-        /// <param name="DatabaseTests"></param>
-        /// <param name="options"></param>
-        public PostgresqlTestRunner(IEnumerable<DatabaseTest> DatabaseTests, Action<DatabaseTestRunnerOptions> options)
-            : base(DatabaseTests, DatabaseKind.PostgreSQL, options)
-        { }
+        public PostgresqlTestRunner()
+        {}
 
         /// <summary>
-        /// Get PostgreSQL database connection
+        /// Run the database runner
         /// </summary>
         /// <returns></returns>
-        protected override IDbConnection GetConnection()
+        public async Task<TestResult> Run(Test databaseTest,
+            TestRunnerOptions databaseTestOptions)
         {
-            return new NpgsqlConnection(_databaseTestOptions.ConnectionString);
+            using (var dbConnection = new NpgsqlConnection(databaseTestOptions.ConnectionString))
+            {
+                dbConnection.Open();
+
+                var sw = new Stopwatch();
+                sw.Start();
+
+                var databaseResult = await dbConnection.ExecuteScalarAsync<int>(databaseTest.Script);
+
+                sw.Stop();
+
+                return new TestResult(
+                    Convert.ToBoolean(databaseResult),
+                    databaseTest.Variable,
+                    databaseTest.Script,
+                    databaseTest.DatabaseTestType,
+                    DatabaseKind.PostgreSql,
+                    0,
+                    0,
+                    sw.ElapsedMilliseconds,
+                    null);
+            }
         }
     }
 }

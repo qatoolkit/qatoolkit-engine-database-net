@@ -6,7 +6,7 @@ namespace QAToolKit.Engine.Database
     /// <summary>
     /// Database test runner options
     /// </summary>
-    public class DatabaseTestRunnerOptions
+    public class TestRunnerOptions
     {
         internal DatabaseKind DatabaseKind { get; private set; } = DatabaseKind.Undefined;
         internal string ConnectionString { get; private set; }
@@ -16,13 +16,10 @@ namespace QAToolKit.Engine.Database
         /// </summary>
         /// <param name="serverConnection"></param>
         /// <returns></returns>
-        public DatabaseTestRunnerOptions AddSQLServerConnection(string serverConnection)
+        public TestRunnerOptions AddSQLServerConnection(string serverConnection)
         {
-            if (serverConnection == null)
-                throw new ArgumentNullException($"{nameof(serverConnection)} is null.");
-
-            DatabaseKind = DatabaseKind.SQLServer;
-            ConnectionString = serverConnection;
+            DatabaseKind = DatabaseKind.SqlServer;
+            ConnectionString = serverConnection ?? throw new ArgumentNullException($"{nameof(serverConnection)} is null.");
             return this;
         }
 
@@ -31,13 +28,10 @@ namespace QAToolKit.Engine.Database
         /// </summary>
         /// <param name="serverConnection"></param>
         /// <returns></returns>
-        public DatabaseTestRunnerOptions AddMySQLConnection(string serverConnection)
+        public TestRunnerOptions AddMySQLConnection(string serverConnection)
         {
-            if (serverConnection == null)
-                throw new ArgumentNullException($"{nameof(serverConnection)} is null.");
-
-            DatabaseKind = DatabaseKind.MySQL;
-            ConnectionString = serverConnection;
+            DatabaseKind = DatabaseKind.MySql;
+            ConnectionString = serverConnection ?? throw new ArgumentNullException($"{nameof(serverConnection)} is null.");
             return this;
         }
 
@@ -46,13 +40,10 @@ namespace QAToolKit.Engine.Database
         /// </summary>
         /// <param name="serverConnection"></param>
         /// <returns></returns>
-        public DatabaseTestRunnerOptions AddPostgreSQLConnection(string serverConnection)
+        public TestRunnerOptions AddPostgreSQLConnection(string serverConnection)
         {
-            if (serverConnection == null)
-                throw new ArgumentNullException($"{nameof(serverConnection)} is null.");
-
-            DatabaseKind = DatabaseKind.PostgreSQL;
-            ConnectionString = serverConnection;
+            DatabaseKind = DatabaseKind.PostgreSql;
+            ConnectionString = serverConnection ?? throw new ArgumentNullException($"{nameof(serverConnection)} is null.");
             return this;
         }
     }

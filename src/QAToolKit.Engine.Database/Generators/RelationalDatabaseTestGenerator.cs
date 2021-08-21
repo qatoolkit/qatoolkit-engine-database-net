@@ -10,12 +10,13 @@ namespace QAToolKit.Engine.Database.Generators
     /// <summary>
     /// MySQL database test generator
     /// </summary>
-    public abstract class RelationalDatabaseTestGenerator : IDatabaseTestGenerator<DatabaseTest>
+    public abstract class RelationalDatabaseTestGenerator : IDatabaseTestGenerator<Test>
     {
         /// <summary>
         /// Database test options
         /// </summary>
-        protected readonly DatabaseTestGeneratorOptions _databaseTestOptions;
+        protected readonly TestGeneratorOptions DatabaseTestOptions;
+
         /// <summary>
         /// Database kind
         /// </summary>
@@ -26,10 +27,11 @@ namespace QAToolKit.Engine.Database.Generators
         /// </summary>
         /// <param name="databaseKind"></param>
         /// <param name="options"></param>
-        public RelationalDatabaseTestGenerator(DatabaseKind databaseKind, Action<DatabaseTestGeneratorOptions> options = null)
+        public RelationalDatabaseTestGenerator(DatabaseKind databaseKind,
+            Action<TestGeneratorOptions> options = null)
         {
-            _databaseTestOptions = new DatabaseTestGeneratorOptions();
-            options?.Invoke(_databaseTestOptions);
+            DatabaseTestOptions = new TestGeneratorOptions();
+            options?.Invoke(DatabaseTestOptions);
             DatabaseKind = databaseKind;
         }
 
@@ -37,28 +39,59 @@ namespace QAToolKit.Engine.Database.Generators
         /// Generate MySQL database test scripts
         /// </summary>
         /// <returns></returns>
-        public Task<IEnumerable<DatabaseTest>> Generate()
+        public Task<IEnumerable<Test>> Generate()
         {
-            if (_databaseTestOptions == null)
+            if (DatabaseTestOptions == null)
             {
-                throw new ArgumentNullException($"{nameof(_databaseTestOptions)} is null.");
+                throw new ArgumentNullException($"{nameof(DatabaseTestOptions)} is null.");
             }
 
-            var results = new List<DatabaseTest>();
+            var results = new List<Test>();
 
             results.AddRange(GenerateObjectExistScripts());
             results.AddRange(GenerateCountRecordsScripts());
             results.AddRange(GenerateRecordsExistScripts());
             results.AddRange(GenerateCustomScripts());
+            results.AddRange(GenerateQueryStatisticsScripts());
 
             return Task.FromResult(results.AsEnumerable());
         }
 
-        private IEnumerable<DatabaseTest> GenerateCustomScripts()
+        private IEnumerable<Test> GenerateQueryStatisticsScripts()
         {
-            var results = new List<DatabaseTest>();
+            var results = new List<Test>();
 
-            if (_databaseTestOptions.CustomSqlRules != null)
+            if (DatabaseTestOptions.QueryStatisticsTasks != null)
+            {
+                results.AddRange(GetQueryStatisticsScripts());
+            }
+
+            return results;
+        }
+
+        private IEnumerable<Test> GetQueryStatisticsScripts()
+        {
+            var results = new List<Test>();
+
+            foreach (var record in DatabaseTestOptions.QueryStatisticsTasks)
+            {
+                foreach (var query in record.Queries)
+                {
+                    results.Add(new Test(
+                        GetQueryStatisticsScript(query, record.QueryStatisticsTypes),
+                        TestType.QueryStatistics,
+                        DatabaseKind));
+                }
+            }
+
+            return results;
+        }
+
+        private IEnumerable<Test> GenerateCustomScripts()
+        {
+            var results = new List<Test>();
+
+            if (DatabaseTestOptions.CustomSqlRules != null)
             {
                 results.AddRange(GetCustomScripts());
             }
@@ -66,26 +99,26 @@ namespace QAToolKit.Engine.Database.Generators
             return results;
         }
 
-        private IEnumerable<DatabaseTest> GetCustomScripts()
+        private IEnumerable<Test> GetCustomScripts()
         {
-            var results = new List<DatabaseTest>();
+            var results = new List<Test>();
 
-            foreach (var record in _databaseTestOptions.CustomSqlRules)
+            foreach (var record in DatabaseTestOptions.CustomSqlRules)
             {
-                results.Add(new DatabaseTest(
+                results.Add(new Test(
                     GetCustomScript(record),
-                    DatabaseTestType.CustomScript,
+                    TestType.CustomScript,
                     DatabaseKind));
             }
 
             return results;
         }
 
-        private IEnumerable<DatabaseTest> GenerateCountRecordsScripts()
+        private IEnumerable<Test> GenerateCountRecordsScripts()
         {
-            var results = new List<DatabaseTest>();
+            var results = new List<Test>();
 
-            if (_databaseTestOptions.DatabaseRecordsCountRules != null)
+            if (DatabaseTestOptions.DatabaseRecordsCountRules != null)
             {
                 results.AddRange(GetRecordCountScripts());
             }
@@ -93,27 +126,27 @@ namespace QAToolKit.Engine.Database.Generators
             return results;
         }
 
-        private IEnumerable<DatabaseTest> GetRecordCountScripts()
+        private IEnumerable<Test> GetRecordCountScripts()
         {
-            var results = new List<DatabaseTest>();
+            var results = new List<Test>();
 
-            foreach (var record in _databaseTestOptions.DatabaseRecordsCountRules)
+            foreach (var record in DatabaseTestOptions.DatabaseRecordsCountRules)
             {
-                results.Add(new DatabaseTest(
+                results.Add(new Test(
                     record.TableName,
                     GetRecordCountScript(record),
-                    DatabaseTestType.RecordCount,
+                    TestType.RecordCount,
                     DatabaseKind));
             }
 
             return results;
         }
 
-        private IEnumerable<DatabaseTest> GenerateRecordsExistScripts()
+        private IEnumerable<Test> GenerateRecordsExistScripts()
         {
-            var results = new List<DatabaseTest>();
+            var results = new List<Test>();
 
-            if (_databaseTestOptions.DatabaseRecordsExitsRules != null)
+            if (DatabaseTestOptions.DatabaseRecordsExitsRules != null)
             {
                 results.AddRange(GetRecordsExistScripts());
             }
@@ -121,27 +154,27 @@ namespace QAToolKit.Engine.Database.Generators
             return results;
         }
 
-        private IEnumerable<DatabaseTest> GetRecordsExistScripts()
+        private IEnumerable<Test> GetRecordsExistScripts()
         {
-            var results = new List<DatabaseTest>();
+            var results = new List<Test>();
 
-            foreach (var record in _databaseTestOptions.DatabaseRecordsExitsRules)
+            foreach (var record in DatabaseTestOptions.DatabaseRecordsExitsRules)
             {
-                results.Add(new DatabaseTest(
+                results.Add(new Test(
                     record.TableName,
                     GetRecordExistScript(record),
-                    DatabaseTestType.RecordExist,
+                    TestType.RecordExist,
                     DatabaseKind));
             }
 
             return results;
         }
 
-        private IEnumerable<DatabaseTest> GenerateObjectExistScripts()
+        private IEnumerable<Test> GenerateObjectExistScripts()
         {
-            var results = new List<DatabaseTest>();
+            var results = new List<Test>();
 
-            if (_databaseTestOptions.DatabaseObjectsExistRules != null)
+            if (DatabaseTestOptions.DatabaseObjectsExistRules != null)
             {
                 results.AddRange(GetTableExistScripts());
                 results.AddRange(GetViewExistScripts());
@@ -151,20 +184,21 @@ namespace QAToolKit.Engine.Database.Generators
             return results;
         }
 
-        private IEnumerable<DatabaseTest> GetTableExistScripts()
+        private IEnumerable<Test> GetTableExistScripts()
         {
-            var results = new List<DatabaseTest>();
+            var results = new List<Test>();
 
-            _databaseTestOptions.DatabaseObjectsExistRules.TryGetValue(DatabaseObjectType.Table, out var tableValues);
+            DatabaseTestOptions.DatabaseObjectsExistRules.TryGetValue(DatabaseObjectType.Table,
+                out var tableValues);
 
             if (tableValues != null)
             {
                 foreach (var table in tableValues)
                 {
-                    results.Add(new DatabaseTest(
+                    results.Add(new Test(
                         table,
                         GetTableExistScript(table),
-                        DatabaseTestType.ObjectExist,
+                        TestType.ObjectExist,
                         DatabaseKind));
                 }
             }
@@ -172,20 +206,20 @@ namespace QAToolKit.Engine.Database.Generators
             return results;
         }
 
-        private IEnumerable<DatabaseTest> GetViewExistScripts()
+        private IEnumerable<Test> GetViewExistScripts()
         {
-            var results = new List<DatabaseTest>();
+            var results = new List<Test>();
 
-            _databaseTestOptions.DatabaseObjectsExistRules.TryGetValue(DatabaseObjectType.View, out var viewValues);
+            DatabaseTestOptions.DatabaseObjectsExistRules.TryGetValue(DatabaseObjectType.View, out var viewValues);
 
             if (viewValues != null)
             {
                 foreach (var view in viewValues)
                 {
-                    results.Add(new DatabaseTest(
+                    results.Add(new Test(
                         view,
                         GetViewExistScript(view),
-                        DatabaseTestType.ObjectExist,
+                        TestType.ObjectExist,
                         DatabaseKind));
                 }
             }
@@ -193,20 +227,21 @@ namespace QAToolKit.Engine.Database.Generators
             return results;
         }
 
-        private IEnumerable<DatabaseTest> GetStoredProcedureExistScripts()
+        private IEnumerable<Test> GetStoredProcedureExistScripts()
         {
-            var results = new List<DatabaseTest>();
+            var results = new List<Test>();
 
-            _databaseTestOptions.DatabaseObjectsExistRules.TryGetValue(DatabaseObjectType.StoredProcedure, out var storedProcedureValues);
+            DatabaseTestOptions.DatabaseObjectsExistRules.TryGetValue(DatabaseObjectType.StoredProcedure,
+                out var storedProcedureValues);
 
             if (storedProcedureValues != null)
             {
                 foreach (var storedProcedure in storedProcedureValues)
                 {
-                    results.Add(new DatabaseTest(
+                    results.Add(new Test(
                         storedProcedure,
                         GetStoredProcedureExistScript(storedProcedure),
-                        DatabaseTestType.ObjectExist,
+                        TestType.ObjectExist,
                         DatabaseKind));
                 }
             }
@@ -240,14 +275,14 @@ namespace QAToolKit.Engine.Database.Generators
         /// </summary>
         /// <param name="recordExist"></param>
         /// <returns></returns>
-        protected abstract string GetRecordExistScript(DatabaseRecordExistRule recordExist);
+        protected abstract string GetRecordExistScript(RecordExistRule recordExist);
 
         /// <summary>
         /// Get script to count the records in a table
         /// </summary>
         /// <param name="recordCount"></param>
         /// <returns></returns>
-        protected abstract string GetRecordCountScript(DatabaseRecordCountRule recordCount);
+        protected abstract string GetRecordCountScript(RecordCountRule recordCount);
 
         /// <summary>
         /// Get custom sql script
@@ -255,5 +290,13 @@ namespace QAToolKit.Engine.Database.Generators
         /// <param name="script"></param>
         /// <returns></returns>
         protected abstract string GetCustomScript(string script);
+
+        /// <summary>
+        /// Get custom query statistics script
+        /// </summary>
+        /// <param name="script"></param>
+        /// <param name="types"></param>
+        /// <returns></returns>
+        protected abstract string GetQueryStatisticsScript(string script, QueryStatisticsType[] types);
     }
 }

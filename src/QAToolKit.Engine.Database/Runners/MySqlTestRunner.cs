@@ -1,32 +1,54 @@
 ﻿using MySql.Data.MySqlClient;
 using QAToolKit.Engine.Database.Models;
 using System;
-using System.Collections.Generic;
-using System.Data;
+using System.Diagnostics;
+using System.Threading.Tasks;
+using Dapper;
+using QAToolKit.Engine.Database.Interfaces;
 
 namespace QAToolKit.Engine.Database.Runners
 {
     /// <summary>
-    /// SqlServer test runner
+    /// MySql server test runner
     /// </summary>
-    public class MySqlTestRunner : RelationalDatabaseTestRunner
+    public class MySqlTestRunner : ISqlRunner
     {
         /// <summary>
-        /// SqServer test runner instance
+        /// Create new instance of MySQL server runner
         /// </summary>
-        /// <param name="DatabaseTests"></param>
-        /// <param name="options"></param>
-        public MySqlTestRunner(IEnumerable<DatabaseTest> DatabaseTests, Action<DatabaseTestRunnerOptions> options)
-            : base(DatabaseTests, DatabaseKind.MySQL, options)
-        { }
+        public MySqlTestRunner()
+        {
+        }
 
         /// <summary>
-        /// Get MySQL database connection
+        /// Run the database runner
         /// </summary>
         /// <returns></returns>
-        protected override IDbConnection GetConnection()
+        public async Task<TestResult> Run(Test databaseTest,
+            TestRunnerOptions databaseTestOptions)
         {
-            return new MySqlConnection(_databaseTestOptions.ConnectionString);
+            using (var dbConnection = new MySqlConnection(databaseTestOptions.ConnectionString))
+            {
+                dbConnection.Open();
+
+                var sw = new Stopwatch();
+                sw.Start();
+
+                var databaseResult = await dbConnection.ExecuteScalarAsync<int>(databaseTest.Script);
+
+                sw.Stop();
+
+                return new TestResult(
+                    Convert.ToBoolean(databaseResult),
+                    databaseTest.Variable,
+                    databaseTest.Script,
+                    databaseTest.DatabaseTestType,
+                    DatabaseKind.MySql,
+                    0,
+                    0,
+                    sw.ElapsedMilliseconds,
+                    null);
+            }
         }
     }
 }
