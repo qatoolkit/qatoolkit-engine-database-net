@@ -1,0 +1,28 @@
+﻿{
+    "Id": "285d8d83-522a-45aa-9fdc-b02a33d51ac4",
+    "Hash": "0x10B77E0C9729146F840828B363695D0B",
+    "RunAt": "2021-03-05T17:13:39.503751+01:00",
+    "DatabaseResult": null,
+    "Variable": null,
+    "Script": "SET STATISTICS TIME ON;SET STATISTICS IO ON;SELECT * FROM myTable;SET STATISTICS TIME OFF;SET STATISTICS IO OFF;",
+    "DatabaseTestType": 4,
+    "DatabaseKind": 1,
+    "ServerCpuTime": 68,
+    "ServerElapsedTime": 242,
+    "TotalElapsedTime": 447,
+    "Statistics": {
+        "myTable": {
+            "ScanCount": 1,
+            "LogicalReads": 1674,
+            "PhysicalReads": 0,
+            "PageServerReads": 0,
+            "ReadAheadReads": 0,
+            "PageServerReadAheadReads": 0,
+            "LobLogicalReads": 0,
+            "LobPhysicalReads": 0,
+            "LobPageServerReads": 0,
+            "LobReadAheadReads": 0,
+            "LobPageServerReadAheadReads": 0
+        }
+    }
+}

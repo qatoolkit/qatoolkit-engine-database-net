@@ -12,14 +12,14 @@
         /// <summary>
         /// SQL server database kind
         /// </summary>
-        SQLServer = 1,
+        SqlServer = 1,
         /// <summary>
         /// MySQl server database kind
         /// </summary>
-        MySQL = 2,
+        MySql = 2,
         /// <summary>
         /// PostgreSQL server database kind
         /// </summary>
-        PostgreSQL = 3
+        PostgreSql = 3
     }
 }
