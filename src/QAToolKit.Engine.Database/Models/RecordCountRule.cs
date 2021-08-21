@@ -3,16 +3,12 @@
     /// <summary>
     /// Database rule
     /// </summary>
-    public class DatabaseRecordExistRule
+    public class RecordCountRule
     {
         /// <summary>
         /// Database table name
         /// </summary>
         public string TableName { get; set; }
-        /// <summary>
-        /// Column name
-        /// </summary>
-        public string ColumnName { get; set; }
         /// <summary>
         /// Operator
         /// </summary>
@@ -20,6 +16,6 @@
         /// <summary>
         /// Value
         /// </summary>
-        public object Value { get; set; }
+        public long Count { get; set; }
     }
 }

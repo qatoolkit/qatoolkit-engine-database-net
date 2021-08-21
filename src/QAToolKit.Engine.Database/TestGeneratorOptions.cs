@@ -7,12 +7,13 @@ namespace QAToolKit.Engine.Database
     /// <summary>
     /// Database test generator options
     /// </summary>
-    public class DatabaseTestGeneratorOptions
+    public class TestGeneratorOptions
     {
         internal Dictionary<DatabaseObjectType, string[]> DatabaseObjectsExistRules { get; private set; }
-        internal List<DatabaseRecordCountRule> DatabaseRecordsCountRules { get; private set; }
-        internal List<DatabaseRecordExistRule> DatabaseRecordsExitsRules { get; private set; }
+        internal List<RecordCountRule> DatabaseRecordsCountRules { get; private set; }
+        internal List<RecordExistRule> DatabaseRecordsExitsRules { get; private set; }
         internal List<string> CustomSqlRules { get; private set; }
+        internal List<QueryStatisticsTask> QueryStatisticsTasks { get; private set; }
 
         /// <summary>
         /// Add database object exist rules
@@ -20,15 +21,12 @@ namespace QAToolKit.Engine.Database
         /// <param name="objects"></param>
         /// <param name="databaseObjectType"></param>
         /// <returns></returns>
-        public DatabaseTestGeneratorOptions AddDatabaseObjectExitsRule(string[] objects, DatabaseObjectType databaseObjectType)
+        public TestGeneratorOptions AddDatabaseObjectExitsRule(string[] objects, DatabaseObjectType databaseObjectType)
         {
             if (objects == null)
                 throw new ArgumentNullException($"{nameof(objects)} is null.");
 
-            if (DatabaseObjectsExistRules == null)
-            {
-                DatabaseObjectsExistRules = new Dictionary<DatabaseObjectType, string[]>();
-            }
+            DatabaseObjectsExistRules ??= new Dictionary<DatabaseObjectType, string[]>();
 
             DatabaseObjectsExistRules.Add(databaseObjectType, objects);
 
@@ -40,15 +38,12 @@ namespace QAToolKit.Engine.Database
         /// </summary>
         /// <param name="objects"></param>
         /// <returns></returns>
-        public DatabaseTestGeneratorOptions AddDatabaseRecordsCountRule(List<DatabaseRecordCountRule> objects)
+        public TestGeneratorOptions AddDatabaseRecordsCountRule(List<RecordCountRule> objects)
         {
             if (objects == null)
                 throw new ArgumentNullException($"{nameof(objects)} is null.");
 
-            if (DatabaseRecordsCountRules == null)
-            {
-                DatabaseRecordsCountRules = new List<DatabaseRecordCountRule>();
-            }
+            DatabaseRecordsCountRules ??= new List<RecordCountRule>();
 
             DatabaseRecordsCountRules.AddRange(objects);
 
@@ -60,15 +55,12 @@ namespace QAToolKit.Engine.Database
         /// </summary>
         /// <param name="objects"></param>
         /// <returns></returns>
-        public DatabaseTestGeneratorOptions AddDatabaseRecordExitsRule(List<DatabaseRecordExistRule> objects)
+        public TestGeneratorOptions AddDatabaseRecordExitsRule(List<RecordExistRule> objects)
         {
             if (objects == null)
                 throw new ArgumentNullException($"{nameof(objects)} is null.");
 
-            if (DatabaseRecordsExitsRules == null)
-            {
-                DatabaseRecordsExitsRules = new List<DatabaseRecordExistRule>();
-            }
+            DatabaseRecordsExitsRules ??= new List<RecordExistRule>();
 
             DatabaseRecordsExitsRules.AddRange(objects);
 
@@ -80,17 +72,34 @@ namespace QAToolKit.Engine.Database
         /// </summary>
         /// <param name="sqlStatements"></param>
         /// <returns></returns>
-        public DatabaseTestGeneratorOptions AddCustomSqlRule(List<string> sqlStatements)
+        public TestGeneratorOptions AddCustomSqlRule(List<string> sqlStatements)
         {
             if (sqlStatements == null)
                 throw new ArgumentNullException($"{nameof(sqlStatements)} is null.");
 
-            if (CustomSqlRules == null)
-            {
-                CustomSqlRules = new List<string>();
-            }
+            CustomSqlRules ??= new List<string>();
 
             CustomSqlRules.AddRange(sqlStatements);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Add database query statistics rules
+        /// </summary>
+        /// <param name="queries"></param>
+        /// <param name="statisticsTypes"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public TestGeneratorOptions CaptureQueryStatistics(string[] queries,
+            QueryStatisticsType[] statisticsTypes)
+        {
+            if (queries == null)
+                throw new ArgumentNullException($"{nameof(queries)} is null.");
+
+            QueryStatisticsTasks ??= new List<QueryStatisticsTask>();
+
+            QueryStatisticsTasks.Add(new QueryStatisticsTask(queries, statisticsTypes));
 
             return this;
         }

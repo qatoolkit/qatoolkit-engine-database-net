@@ -3,11 +3,10 @@
     /// <summary>
     /// Database script
     /// </summary>
-    public class DatabaseTest
-
+    public class Test
     {
         /// <summary>
-        /// Variable name of the object beiing tested
+        /// Variable name of the object being tested
         /// </summary>
         public string Variable { get; private set; }
         /// <summary>
@@ -15,9 +14,9 @@
         /// </summary>
         public string Script { get; private set; }
         /// <summary>
-        /// Databae test type
+        /// Database test type
         /// </summary>
-        public DatabaseTestType DatabaseTestType { get; private set; }
+        public TestType DatabaseTestType { get; private set; }
         /// <summary>
         /// Database kind
         /// </summary>
@@ -30,7 +29,7 @@
         /// <param name="script"></param>
         /// <param name="databaseTestType"></param>
         /// <param name="databaseKind"></param>
-        public DatabaseTest(string variable, string script, DatabaseTestType databaseTestType, DatabaseKind databaseKind)
+        public Test(string variable, string script, TestType databaseTestType, DatabaseKind databaseKind)
         {
             Variable = variable;
             Script = script;
@@ -44,7 +43,7 @@
         /// <param name="script"></param>
         /// <param name="databaseTestType"></param>
         /// <param name="databaseKind"></param>
-        public DatabaseTest(string script, DatabaseTestType databaseTestType, DatabaseKind databaseKind)
+        public Test(string script, TestType databaseTestType, DatabaseKind databaseKind)
         {
             Variable = null;
             Script = script;

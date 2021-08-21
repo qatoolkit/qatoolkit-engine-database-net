@@ -1,9 +1,9 @@
 ﻿using NSubstitute;
 using QAToolKit.Engine.Database.Generators;
 using QAToolKit.Engine.Database.Models;
-using QAToolKit.Engine.Database.Runners;
 using System;
 using System.Threading.Tasks;
+using QAToolKit.Engine.Database.Runners.Factories;
 using Xunit;
 
 namespace QAToolKit.Engine.Database.Test.Runners
@@ -20,8 +20,8 @@ namespace QAToolKit.Engine.Database.Test.Runners
 
             var script = await generator.Generate();
 
-            var options = Substitute.For<Action<DatabaseTestRunnerOptions>>();
-            var runner = Substitute.For<MySqlTestRunner>(script, options);
+            var options = Substitute.For<Action<TestRunnerOptions>>();
+            var runner = Substitute.For<MySqlTestRunnerFactory>(script, options);
 
             Assert.NotNull(runner);
         }

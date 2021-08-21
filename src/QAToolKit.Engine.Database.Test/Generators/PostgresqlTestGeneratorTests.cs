@@ -17,17 +17,17 @@ namespace QAToolKit.Engine.Database.Test.Generators
                 options.AddDatabaseObjectExitsRule(new string[] { "mytable" }, DatabaseObjectType.Table);
             });
 
-            var results = new List<DatabaseTest>
+            var results = new List<Models.Test>
             {
-                new DatabaseTest(
+                new Models.Test(
                         "mytable",
                         $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""tables"" WHERE ""table_name"" = 'mytable');",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind.PostgreSQL)
+                        TestType.ObjectExist,
+                        DatabaseKind.PostgreSql)
             }.ToExpectedObject();
 
             results.ShouldEqual(await generator.Generate());
-            Assert.Equal(DatabaseKind.PostgreSQL, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.PostgreSql, generator.DatabaseKind);
         }
 
         [Fact]
@@ -38,17 +38,17 @@ namespace QAToolKit.Engine.Database.Test.Generators
                 options.AddDatabaseObjectExitsRule(new string[] { "myview" }, DatabaseObjectType.View);
             });
 
-            var results = new List<DatabaseTest>
+            var results = new List<Models.Test>
             {
-                new DatabaseTest(
+                new Models.Test(
                         "myview",
                         $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""views"" WHERE ""table_name"" = 'myview');",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind.PostgreSQL)
+                        TestType.ObjectExist,
+                        DatabaseKind.PostgreSql)
             }.ToExpectedObject();
 
             results.ShouldEqual(await generator.Generate());
-            Assert.Equal(DatabaseKind.PostgreSQL, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.PostgreSql, generator.DatabaseKind);
         }
 
         [Fact]
@@ -59,17 +59,17 @@ namespace QAToolKit.Engine.Database.Test.Generators
                 options.AddDatabaseObjectExitsRule(new string[] { "mystoredprocedure" }, DatabaseObjectType.StoredProcedure);
             });
 
-            var results = new List<DatabaseTest>
+            var results = new List<Models.Test>
             {
-                new DatabaseTest(
+                new Models.Test(
                         "mystoredprocedure",
                         $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""routines"" WHERE ""routine_name"" = 'mystoredprocedure');",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind.PostgreSQL)
+                        TestType.ObjectExist,
+                        DatabaseKind.PostgreSql)
             }.ToExpectedObject();
 
             results.ShouldEqual(await generator.Generate());
-            Assert.Equal(DatabaseKind.PostgreSQL, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.PostgreSql, generator.DatabaseKind);
         }
 
         [Fact]
@@ -80,22 +80,22 @@ namespace QAToolKit.Engine.Database.Test.Generators
                 options.AddDatabaseObjectExitsRule(new string[] { "table1", "table2" }, DatabaseObjectType.Table);
             });
 
-            var results = new List<DatabaseTest>
+            var results = new List<Models.Test>
             {
-               new DatabaseTest(
+               new Models.Test(
                         "table1",
                         $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""tables"" WHERE ""table_name"" = 'table1');",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind.PostgreSQL),
-               new DatabaseTest(
+                        TestType.ObjectExist,
+                        DatabaseKind.PostgreSql),
+               new Models.Test(
                         "table2",
                         $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""tables"" WHERE ""table_name"" = 'table2');",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind.PostgreSQL)
+                        TestType.ObjectExist,
+                        DatabaseKind.PostgreSql)
             }.ToExpectedObject();
 
             results.ShouldEqual(await generator.Generate());
-            Assert.Equal(DatabaseKind.PostgreSQL, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.PostgreSql, generator.DatabaseKind);
         }
 
         [Fact]
@@ -106,22 +106,22 @@ namespace QAToolKit.Engine.Database.Test.Generators
                 options.AddDatabaseObjectExitsRule(new string[] { "view1", "view2" }, DatabaseObjectType.View);
             });
 
-            var results = new List<DatabaseTest>
+            var results = new List<Models.Test>
             {
-                 new DatabaseTest(
+                 new Models.Test(
                         "view1",
                         $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""views"" WHERE ""table_name"" = 'view1');",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind.PostgreSQL),
-                 new DatabaseTest(
+                        TestType.ObjectExist,
+                        DatabaseKind.PostgreSql),
+                 new Models.Test(
                         "view2",
                         $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""views"" WHERE ""table_name"" = 'view2');",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind.PostgreSQL)
+                        TestType.ObjectExist,
+                        DatabaseKind.PostgreSql)
             }.ToExpectedObject();
 
             results.ShouldEqual(await generator.Generate());
-            Assert.Equal(DatabaseKind.PostgreSQL, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.PostgreSql, generator.DatabaseKind);
         }
 
         [Fact]
@@ -132,22 +132,22 @@ namespace QAToolKit.Engine.Database.Test.Generators
                 options.AddDatabaseObjectExitsRule(new string[] { "sp1", "sp2" }, DatabaseObjectType.StoredProcedure);
             });
 
-            var results = new List<DatabaseTest>
+            var results = new List<Models.Test>
             {
-                new DatabaseTest(
+                new Models.Test(
                         "sp1",
                         $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""routines"" WHERE ""routine_name"" = 'sp1');",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind.PostgreSQL),
-                new DatabaseTest(
+                        TestType.ObjectExist,
+                        DatabaseKind.PostgreSql),
+                new Models.Test(
                         "sp2",
                         $@"SELECT EXISTS(SELECT * FROM ""information_schema"".""routines"" WHERE ""routine_name"" = 'sp2');",
-                        DatabaseTestType.ObjectExist,
-                        DatabaseKind.PostgreSQL)
+                        TestType.ObjectExist,
+                        DatabaseKind.PostgreSql)
             }.ToExpectedObject();
 
             results.ShouldEqual(await generator.Generate());
-            Assert.Equal(DatabaseKind.PostgreSQL, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.PostgreSql, generator.DatabaseKind);
         }
 
         [Fact]
@@ -158,7 +158,7 @@ namespace QAToolKit.Engine.Database.Test.Generators
                 options.AddDatabaseObjectExitsRule(new string[] { "sp1", "sp2" }, DatabaseObjectType.StoredProcedure);
             });
 
-            Assert.Equal(DatabaseKind.PostgreSQL, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.PostgreSql, generator.DatabaseKind);
         }
 
         [Fact]
@@ -167,9 +167,9 @@ namespace QAToolKit.Engine.Database.Test.Generators
             var generator = new PostgresqlTestGenerator(options =>
             {
                 options.AddDatabaseRecordExitsRule(
-                new List<DatabaseRecordExistRule>()
+                new List<RecordExistRule>()
                 {
-                    new DatabaseRecordExistRule()
+                    new RecordExistRule()
                     {
                         TableName = "mytable",
                         ColumnName = "name",
@@ -179,17 +179,17 @@ namespace QAToolKit.Engine.Database.Test.Generators
                 });
             });
 
-            var results = new List<DatabaseTest>
+            var results = new List<Models.Test>
             {
-                new DatabaseTest(
+                new Models.Test(
                         "mytable",
                         $@"SELECT EXISTS(SELECT * FROM ""mytable"" WHERE ""name"" = 'myname');",
-                        DatabaseTestType.RecordExist,
-                        DatabaseKind.PostgreSQL)
+                        TestType.RecordExist,
+                        DatabaseKind.PostgreSql)
             }.ToExpectedObject();
 
             results.ShouldEqual(await generator.Generate());
-            Assert.Equal(DatabaseKind.PostgreSQL, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.PostgreSql, generator.DatabaseKind);
         }
 
         [Fact]
@@ -198,9 +198,9 @@ namespace QAToolKit.Engine.Database.Test.Generators
             var generator = new PostgresqlTestGenerator(options =>
             {
                 options.AddDatabaseRecordsCountRule(
-                new List<DatabaseRecordCountRule>()
+                new List<RecordCountRule>()
                 {
-                    new DatabaseRecordCountRule()
+                    new RecordCountRule()
                     {
                         TableName = "mytable",
                         Operator = "=",
@@ -209,17 +209,17 @@ namespace QAToolKit.Engine.Database.Test.Generators
                 });
             });
 
-            var results = new List<DatabaseTest>
+            var results = new List<Models.Test>
             {
-                new DatabaseTest(
+                new Models.Test(
                         "mytable",
                         $@"SELECT EXISTS (SELECT * FROM ""mytable"" WHERE (SELECT COUNT(*) AS ""count"" FROM ""mytable"") = 100);",
-                        DatabaseTestType.RecordCount,
-                        DatabaseKind.PostgreSQL)
+                        TestType.RecordCount,
+                        DatabaseKind.PostgreSql)
             }.ToExpectedObject();
 
             results.ShouldEqual(await generator.Generate());
-            Assert.Equal(DatabaseKind.PostgreSQL, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.PostgreSql, generator.DatabaseKind);
         }
 
         [Fact]
@@ -234,17 +234,17 @@ namespace QAToolKit.Engine.Database.Test.Generators
                 });
             });
 
-            var results = new List<DatabaseTest>
+            var results = new List<Models.Test>
             {
-                new DatabaseTest(
+                new Models.Test(
                         null,
                         $@"SELECT EXISTS(SELECT * FROM ""mytable"" WHERE (SELECT COUNT(*) AS ""count"" FROM ""mytable"") = 10);",
-                        DatabaseTestType.CustomScript,
-                        DatabaseKind.PostgreSQL)
+                        TestType.CustomScript,
+                        DatabaseKind.PostgreSql)
             }.ToExpectedObject();
 
             results.ShouldEqual(await generator.Generate());
-            Assert.Equal(DatabaseKind.PostgreSQL, generator.DatabaseKind);
+            Assert.Equal(DatabaseKind.PostgreSql, generator.DatabaseKind);
         }
     }
 }

@@ -3,7 +3,7 @@
     /// <summary>
     /// Database test type
     /// </summary>
-    public enum DatabaseTestType
+    public enum TestType
     {
         /// <summary>
         /// Assert if the object exists in the database, like tables, views or stored procedures
@@ -20,6 +20,10 @@
         /// <summary>
         /// Custom sql script
         /// </summary>
-        CustomScript = 3
+        CustomScript = 3,
+        /// <summary>
+        /// Query statistics script
+        /// </summary>
+        QueryStatistics = 4
     }
 }
