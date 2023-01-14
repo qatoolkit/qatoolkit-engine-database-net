@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;netstandard2.1;netcoreapp3.1;net6.0</TargetFrameworks>
+		<TargetFrameworks>netstandard2.0;netstandard2.1;net7.0</TargetFrameworks>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<LangVersion>latest</LangVersion>
 		<ProjectGuid>665548a2-15c9-4e5b-b658-24a0020efc3a</ProjectGuid>
@@ -19,7 +19,7 @@
 		<PackageProjectUrl>https://github.com/qatoolkit/qatoolkit-engine-database-net</PackageProjectUrl>
 		<PackageIcon>qatoolkit-64x64.png</PackageIcon>
 		<RepositoryUrl>https://github.com/qatoolkit/qatoolkit-engine-database-net</RepositoryUrl>
-		<PackageTags>qatoolkit-engine-database-net;.net;c#;f#;dotnet;netstandard;net6</PackageTags>
+		<PackageTags>qatoolkit-engine-database-net;.net;c#;f#;dotnet;netstandard;net7</PackageTags>
 		<Configurations>Debug;Release</Configurations>
 	</PropertyGroup>
 	
@@ -35,11 +35,11 @@
 
 	<ItemGroup>
 	  <PackageReference Include="Dapper" Version="2.0.123" />
-	  <PackageReference Include="MySql.Data" Version="8.0.28" />
-	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-	  <PackageReference Include="Npgsql" Version="6.0.3" />
-	  <PackageReference Include="QAToolKit.Core" Version="0.3.13" />
-	  <PackageReference Include="SqlKata" Version="2.3.7" />
-	  <PackageReference Include="System.Data.SqlClient" Version="4.8.3" />
+	  <PackageReference Include="MySql.Data" Version="8.0.31" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+	  <PackageReference Include="Npgsql" Version="7.0.1" />
+	  <PackageReference Include="QAToolKit.Core" Version="0.3.14" />
+	  <PackageReference Include="SqlKata" Version="2.4.0" />
+	  <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
 	</ItemGroup>
 </Project>
